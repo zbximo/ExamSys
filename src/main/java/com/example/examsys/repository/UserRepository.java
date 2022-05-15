@@ -4,6 +4,8 @@ import com.example.examsys.entity.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @author: ximo
  * @date: 2022/5/14 16:59
@@ -13,4 +15,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends MongoRepository<User, String> {
     User findByUserId(String id);
+    void deleteByUserId(String userId);
+    List<User> findByName(String userName);
 }

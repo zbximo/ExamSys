@@ -16,6 +16,9 @@ import java.util.List;
 @Data
 @Document(collection = "Course")
 public class Course {
+    /**
+     * 课程ID
+     */
     @Id
     private String courseId;
     /**
@@ -25,13 +28,17 @@ public class Course {
     private String courseName;
 
     /**
-     * 学号列表
+     * 课程学生学号列表
      */
+    @DBRef
     @Field("student_ids")
-    private List<String> studentIdList;
+    private List<User> studentIdList;
 
+    /**
+     * 上课教师
+     */
     @DBRef
     @Field("teacher_id")
-    private User userId;
+    private User teacherId;
 
 }
