@@ -10,7 +10,10 @@ import org.springframework.data.mongodb.core.mapping.Field;
  */
 @Data
 public class UserDTO {
+
     private String userId;
+
     private String name;
+
     private String password;
 }

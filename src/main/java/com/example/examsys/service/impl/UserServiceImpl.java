@@ -3,14 +3,18 @@ package com.example.examsys.service.impl;
 import com.example.examsys.entity.Course;
 import com.example.examsys.entity.User;
 import com.example.examsys.exception.BusinessException;
+import com.example.examsys.form.ToService.UserDTO;
+import com.example.examsys.form.ToView.UserVO;
 import com.example.examsys.repository.CourseRepository;
 import com.example.examsys.repository.UserRepository;
 import com.example.examsys.service.UserService;
 import com.example.examsys.utils.Constants;
+import com.example.examsys.utils.ZuccEchoUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,41 +29,23 @@ class UserServiceImpl implements UserService {
     @Autowired
     private CourseRepository courseRepository;
     /**
-     * @param userMap 用户信息
+     * @param userDTO 用户信息
      * @return
      */
     @Override
-    public String addUser(User userMap) {
+    public String addUser(UserDTO userDTO) {
         User user = new User();
-        BeanUtils.copyProperties(userMap, user);
+        BeanUtils.copyProperties(userDTO, user);
         System.out.println(user.getUserId());
         if (user.getUserId() == null || user.getUserId().equals("")) {
             throw new BusinessException(Constants.PARAM_ERROR, "用户账号为空");
-        } else if (userRepository.findByUserId(userMap.getUserId())!=null){
+        } else if (userRepository.findByUserId(user.getUserId())!=null){
             throw new BusinessException(Constants.PARAM_ERROR, "用户名已存在");
         }
         else if (user.getPassword() == null || user.getPassword().equals("")) {
             throw new BusinessException(Constants.PARAM_ERROR, "密码为空");
         }
         userRepository.save(user);
-        return user.getUserId();
-    }
-
-    /**
-     * @param userMap 用户信息
-     * @return
-     */
-    @Override
-    public String updateUser(User userMap) {
-        User user = new User();
-        BeanUtils.copyProperties(userMap, user);
-        if (user.getUserId() == null || user.getUserId().equals("")) {
-            throw new BusinessException(Constants.PARAM_ERROR, "用户Id为空");
-        }
-        if (userRepository.findByUserId(user.getUserId()) == null) {
-            throw new BusinessException(Constants.QUERY_EMPTY, "找不到该用户: 用户Id: " + user.getUserId() + ", 不能更新");
-        }
-        userRepository.save(userMap);
         return user.getUserId();
     }
 
@@ -75,7 +61,7 @@ class UserServiceImpl implements UserService {
         if (userRepository.findByUserId(id) == null) {
             throw new BusinessException(Constants.QUERY_EMPTY, "找不到该用户: 用户Id: " + id + ", 不能删除");
         }
-        userRepository.deleteById(id);
+        userRepository.deleteByUserId(id);
         return id;
     }
 
@@ -100,7 +86,7 @@ class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public List<User> findByName(String name) {
+    public List<UserVO> findByName(String name) {
         if (name.equals("")) {
             throw new BusinessException(Constants.PARAM_ERROR, "姓名为空");
         }
@@ -108,15 +94,27 @@ class UserServiceImpl implements UserService {
         if (userList.size() == 0) {
             throw new BusinessException(Constants.QUERY_EMPTY, "找不到该用户: 用户姓名: " + name);
         }
-        return userList;
+        System.out.println(ZuccEchoUtils.beanToJson(userList));
+        List<UserVO> userVOList = new ArrayList<>();
+        for (User u: userList){
+            UserVO userVO = new UserVO();
+            BeanUtils.copyProperties(u,userVO);
+        }
+        return userVOList;
     }
 
     /**
      * @return
      */
     @Override
-    public List<User> getAll() {
-        return userRepository.findAll();
+    public List<UserVO> getAll() {
+        List<User> userList = userRepository.findAll();
+        List<UserVO> userVOList = new ArrayList<>();
+        for (User u: userList){
+            UserVO userVO = new UserVO();
+            BeanUtils.copyProperties(u,userVO);
+        }
+        return userVOList;
     }
 
 
@@ -165,15 +163,19 @@ class UserServiceImpl implements UserService {
         }
     }
 
-    /**通过学生Id找到所有课程
-     *
-     * @param studentId
-     * @return
-     */
     @Override
-    public List<Course> findByStudentIdListContains(String studentId) {
+    public List<Course> getCoursesTaught(String teacherId) {
+        User u = new User();
+        u.setUserId(teacherId);
+        return courseRepository.findByTeacherId(u);
+    }
+
+    @Override
+    public List<Course> getCoursesLearned(String studentId) {
         User u = new User();
         u.setUserId(studentId);
         return courseRepository.findByStudentIdListContains(u);
     }
+
+
 }

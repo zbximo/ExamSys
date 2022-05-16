@@ -2,6 +2,8 @@ package com.example.examsys.controller;
 
 import com.example.examsys.entity.Course;
 import com.example.examsys.entity.User;
+import com.example.examsys.form.ToService.UserDTO;
+import com.example.examsys.form.ToView.UserVO;
 import com.example.examsys.repository.UserRepository;
 import com.example.examsys.result.ExceptionMsg;
 import com.example.examsys.result.Response;
@@ -28,26 +30,15 @@ class UserController {
     private UserService userService;
 
     /**
-     * @param userMap 用户信息
+     * @param userDTO 用户信息
      * @return
      */
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResponseData addUser(@RequestBody User userMap) {
-        String id = userService.addUser(userMap);
+    public ResponseData addUser(@RequestBody UserDTO userDTO) {
+        String id = userService.addUser(userDTO);
         logger.warn("create student id: {} ", id);
         return new ResponseData(ExceptionMsg.CREATE_SUCCESS, id);
-    }
-
-    /**
-     * @param userMap 用户信息
-     * @return
-     */
-    @RequestMapping(value = "/update", method = RequestMethod.PUT)
-    public ResponseData updateUser(@RequestBody User userMap) {
-        String id = userService.updateUser(userMap);
-        logger.warn("update student id: {} ", id);
-        return new ResponseData(ExceptionMsg.UPDATE_SUCCESS, userMap);
     }
 
     /**
@@ -82,7 +73,7 @@ class UserController {
      */
     @RequestMapping(value = "/viewUsersByName", method = RequestMethod.GET)
     public ResponseData viewUserByName(@RequestParam("name") String name) {
-        List<User> userList = userService.findByName(name);
+        List<UserVO> userList = userService.findByName(name);
         logger.warn("query students name: {}", name);
         return new ResponseData(ExceptionMsg.QUERY_SUCCESS, userList);
     }
@@ -92,7 +83,7 @@ class UserController {
      */
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
     public ResponseData getAll() {
-        List<User> list = userService.getAll();
+        List<UserVO> list = userService.getAll();
         logger.warn("query all students");
         return new ResponseData(ExceptionMsg.QUERY_SUCCESS, list);
     }
@@ -134,11 +125,25 @@ class UserController {
      * @param id 用户Id
      * @return
      */
-    @RequestMapping(value = "/getUserClass", method = RequestMethod.GET)
-    public Response getUserClass(@RequestParam("id") String id) {
+    @RequestMapping(value = "/getCoursesLearned", method = RequestMethod.GET)
+    public Response getCoursesLearned(@RequestParam("id") String id) {
 
-        List<Course> courseList = userService.findByStudentIdListContains(id);
-        logger.warn("query user's courses");
+        List<Course> courseList = userService.getCoursesLearned(id);
+        logger.warn("query courses learned");
+        return new ResponseData(ExceptionMsg.SUCCESS, courseList);
+    }
+
+    /**
+     * 通过用户Id获取该用户所有课程
+     *
+     * @param id 用户Id
+     * @return
+     */
+    @RequestMapping(value = "/getCoursesTaught", method = RequestMethod.GET)
+    public Response getCoursesTaught(@RequestParam("id") String id) {
+
+        List<Course> courseList = userService.getCoursesTaught(id);
+        logger.warn("query courses taught");
         return new ResponseData(ExceptionMsg.SUCCESS, courseList);
     }
 

@@ -17,7 +17,7 @@ import java.util.Map;
 @Document(indexName = "QuestionBank", replicas = 0, shards = 5)
 public class QuestionBank {
     @Id
-    @Field(type = FieldType.Text)
+    @Field(type = FieldType.Keyword)
     private String questionId;
 
     @Field(type = FieldType.Text,analyzer = "ik_max_word")
@@ -27,7 +27,7 @@ public class QuestionBank {
     private Integer questionType;
 
     /**
-     * 问题设计的领域
+     * 问题涉及的领域
      */
     @Field(type = FieldType.Text,analyzer = "ik_max_word")
     private List<String> questionField;

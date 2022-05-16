@@ -27,7 +27,7 @@ public class CourseController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseData addUser(@RequestBody CourseDTO courseDTO) {
         String id = courseService.addCourse(courseDTO);
-        logger.warn("create student id: {} ", id);
+        logger.warn("create course id: {} ", id);
         return new ResponseData(ExceptionMsg.CREATE_SUCCESS, id);
     }
 }

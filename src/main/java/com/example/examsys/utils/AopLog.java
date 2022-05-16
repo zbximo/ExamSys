@@ -1,4 +1,4 @@
-package com.example.examsys.entity;
+package com.example.examsys.utils;
 
 /**
  * @author:Benjamin
@@ -37,8 +37,8 @@ public class AopLog {
     ThreadLocal<Long> startTime = new ThreadLocal<>();
 
     //定义切点
-//    @Pointcut("execution(* com.example.zuccqa.*.*(..)) && !execution(* com.example.zuccqa.controller.DynamicTask.*(..))")
-    @Pointcut("execution(public * com.example.zuccqa..*.*(..))")
+//    @Pointcut("execution(* com.example.examsys.*.*(..)) && !execution(* com.example.examsys.controller.DynamicTask.*(..))")
+    @Pointcut("execution(public * com.example.examsys..*.*(..))")
     public void aopWebLog() {
     }
 

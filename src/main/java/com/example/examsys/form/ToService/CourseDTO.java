@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * @author: ximo
  * @date: 2022/5/16 19:49
- * @description:
+ * @description: 用于创建课程
  */
 @Data
 public class CourseDTO {

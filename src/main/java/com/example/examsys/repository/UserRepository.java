@@ -1,7 +1,9 @@
 package com.example.examsys.repository;
 
 import com.example.examsys.entity.User;
+import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,6 +17,9 @@ import java.util.List;
 @Repository
 public interface UserRepository extends MongoRepository<User, String> {
     User findByUserId(String id);
+
     void deleteByUserId(String userId);
+    @Query(fields = "{'password':0}")
     List<User> findByName(String userName);
+
 }

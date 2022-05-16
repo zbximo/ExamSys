@@ -41,4 +41,7 @@ public class Course {
     @Field("teacher_id")
     private User teacherId;
 
+    @Field("course_closed")
+    private Integer isClosed;
+
 }

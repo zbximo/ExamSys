@@ -13,6 +13,7 @@ import java.util.List;
  */
 @Data
 public class AnswerSheetDTO {
+
     private String answerSheetId;
 
     private List<AnswerDetail> answerDetailList;
