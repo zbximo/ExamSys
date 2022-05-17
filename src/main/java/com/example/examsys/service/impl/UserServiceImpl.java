@@ -37,7 +37,6 @@ class UserServiceImpl implements UserService {
     public String addUser(UserDTO userDTO) {
         User user = new User();
         BeanUtils.copyProperties(userDTO, user);
-        System.out.println(user.getUserId());
         if (user.getUserId() == null || user.getUserId().equals("")) {
             throw new BusinessException(Constants.PARAM_ERROR, "用户账号为空");
         } else if (userRepository.findByUserId(user.getUserId())!=null){
