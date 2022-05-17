@@ -15,4 +15,7 @@ public interface AnswerSheetService {
     String deleteAnswerSheet(String id);
 
     AnswerSheet findById(String id);
+
+//    CID -> List<Paper>( PaperVO 只获取试卷状态)   PaperId -> List<AnswerSheet> 老师
+//    UID+CID -> List<AnswerSheet> ( PaperVO 获取试卷和答卷状态)  UID+PID -> AnswerSheet
 }
