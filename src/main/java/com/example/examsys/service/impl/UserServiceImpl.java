@@ -4,7 +4,6 @@ import com.example.examsys.entity.Course;
 import com.example.examsys.entity.User;
 import com.example.examsys.exception.BusinessException;
 import com.example.examsys.form.ToService.UserDTO;
-import com.example.examsys.form.ToView.UserVO;
 import com.example.examsys.repository.CourseRepository;
 import com.example.examsys.repository.UserRepository;
 import com.example.examsys.service.UserService;
@@ -15,7 +14,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -87,7 +85,7 @@ class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public List<UserVO> findByName(String name) {
+    public List<User> findByName(String name) {
         if (name.equals("")) {
             throw new BusinessException(Constants.PARAM_ERROR, "姓名为空");
         }
@@ -96,26 +94,15 @@ class UserServiceImpl implements UserService {
             throw new BusinessException(Constants.QUERY_EMPTY, "找不到该用户: 用户姓名: " + name);
         }
         System.out.println(ExamSystemUtils.beanToJson(userList));
-        List<UserVO> userVOList = new ArrayList<>();
-        for (User u: userList){
-            UserVO userVO = new UserVO();
-            BeanUtils.copyProperties(u,userVO);
-        }
-        return userVOList;
+        return userList;
     }
 
     /**
      * @return
      */
     @Override
-    public List<UserVO> getAll() {
-        List<User> userList = userRepository.findAll();
-        List<UserVO> userVOList = new ArrayList<>();
-        for (User u: userList){
-            UserVO userVO = new UserVO();
-            BeanUtils.copyProperties(u,userVO);
-        }
-        return userVOList;
+    public List<User> getAll() {
+        return userRepository.findAll();
     }
 
 
@@ -126,8 +113,6 @@ class UserServiceImpl implements UserService {
      */
     @Override
     public String login(String id, String password) {
-        System.out.println(id+"  "+password);
-        System.out.println("11111");
         if (id.equals("") || password.equals("")) {
             throw new BusinessException(Constants.PARAM_ERROR, "用户名密码不能为空");
         }

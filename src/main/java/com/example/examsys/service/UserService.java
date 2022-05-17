@@ -3,7 +3,6 @@ package com.example.examsys.service;
 import com.example.examsys.entity.Course;
 import com.example.examsys.entity.User;
 import com.example.examsys.form.ToService.UserDTO;
-import com.example.examsys.form.ToView.UserVO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,9 +20,9 @@ public interface UserService {
 
     User findById(String id);
 
-    List<UserVO> findByName(String name);
+    List<User> findByName(String name);
 
-    List<UserVO> getAll();
+    List<User> getAll();
 
     String login(String id, String password);
 

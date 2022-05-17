@@ -3,19 +3,15 @@ package com.example.examsys.controller;
 import com.example.examsys.entity.Course;
 import com.example.examsys.entity.User;
 import com.example.examsys.form.ToService.UserDTO;
-import com.example.examsys.form.ToView.UserVO;
-import com.example.examsys.repository.UserRepository;
 import com.example.examsys.result.ExceptionMsg;
 import com.example.examsys.result.Response;
 import com.example.examsys.result.ResponseData;
 import com.example.examsys.service.UserService;
-import org.bson.types.ObjectId;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author: ximo
@@ -72,7 +68,7 @@ class UserController {
      */
     @RequestMapping(value = "/viewUsersByName", method = RequestMethod.GET)
     public ResponseData viewUserByName(@RequestParam("name") String name) {
-        List<UserVO> userList = userService.findByName(name);
+        List<User> userList = userService.findByName(name);
         logger.warn("query students name: {}", name);
         return new ResponseData(ExceptionMsg.QUERY_SUCCESS, userList);
     }
@@ -82,7 +78,7 @@ class UserController {
      */
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
     public ResponseData getAll() {
-        List<UserVO> list = userService.getAll();
+        List<User> list = userService.getAll();
         logger.warn("query all students");
         return new ResponseData(ExceptionMsg.QUERY_SUCCESS, list);
     }
