@@ -16,7 +16,14 @@ public class Constants {
     public static final Integer Q_CATEGORY_SUBJECTIVE = 3;
     public static final Integer U_CATEGORY_MANAGER = 2;
     public static final Integer U_CATEGORY_TEACHER = 1;
-    public static final Integer U_CATEGORY_STUDENT= 0;
-    public static final Integer A_RECTIFIED = 1;
-    public static final Integer A_NOT_RECTIFY = 0;
+    public static final Integer U_CATEGORY_STUDENT = 0;
+
+    public static final Integer P_STATUS_NOT_START = 0; //考试时间没到
+    public static final Integer P_STATUS_START = 1; //考试开始
+    public static final Integer A_EXAM_ING = 2; //考试中
+    public static final Integer P_STATUS_END = 3; //考试结束
+    public static final Integer A_NOT_RECTIFY = 4; //待批阅
+    public static final Integer A_RECTIFIED = 5; //已批阅
+
+
 }

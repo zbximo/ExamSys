@@ -12,5 +12,4 @@ public interface CourseService {
 
     Course findById(String id);
 
-
 }
