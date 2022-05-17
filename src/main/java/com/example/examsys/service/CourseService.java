@@ -8,4 +8,9 @@ import org.springframework.stereotype.Service;
 public interface CourseService {
     String addCourse(CourseDTO courseDTO);
 
+    String deleteCourse(String id);
+
+    Course findById(String id);
+
+
 }

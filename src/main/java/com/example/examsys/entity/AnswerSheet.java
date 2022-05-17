@@ -46,5 +46,7 @@ public class AnswerSheet {
     @Field("submit_date")
     private Date submitDate;
 
+    @Field("status")
+    private Integer status;
 
 }

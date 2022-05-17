@@ -1,5 +1,6 @@
 package com.example.examsys.entity;
 
+import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.Map;
  * @date: 2022/5/15 11:40
  * @description:
  */
-
+@Data
 public class Question {
 
     /**

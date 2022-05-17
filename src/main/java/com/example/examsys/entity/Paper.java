@@ -20,8 +20,11 @@ public class Paper {
     @Id
     private String paperId;
 
+    @Field("paper_title")
+    private String paperTitle;
+
     @DBRef
-    @Field("paper_course")
+    @Field("paper_course_id")
     private Course course;
 
     @Field("questions")

@@ -33,7 +33,6 @@ class UserController {
      * @param userDTO 用户信息
      * @return
      */
-
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseData addUser(@RequestBody UserDTO userDTO) {
         String id = userService.addUser(userDTO);

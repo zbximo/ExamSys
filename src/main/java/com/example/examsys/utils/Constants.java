@@ -14,8 +14,9 @@ public class Constants {
     public static final Integer Q_CATEGORY_MULTI_CHOICE = 1;
     public static final Integer Q_CATEGORY_Judgment = 2;
     public static final Integer Q_CATEGORY_SUBJECTIVE = 3;
-    public static final Integer U_CATEGORY_MANAGER = 1;
-    public static final Integer U_CATEGORY_COMMON = 0;
-
-
+    public static final Integer U_CATEGORY_MANAGER = 2;
+    public static final Integer U_CATEGORY_TEACHER = 1;
+    public static final Integer U_CATEGORY_STUDENT= 0;
+    public static final Integer A_RECTIFIED = 1;
+    public static final Integer A_NOT_RECTIFY = 0;
 }
