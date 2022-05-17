@@ -2,8 +2,6 @@ package com.example.examsys.form.ToService;
 
 import com.example.examsys.entity.User;
 import lombok.Data;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.List;
 
@@ -17,7 +15,7 @@ public class CourseDTO {
 
     private String courseName;
 
-    private List<User> studentIdList;
+    private List<User> studentList;
 
-    private User teacherId;
+    private User teacher;
 }

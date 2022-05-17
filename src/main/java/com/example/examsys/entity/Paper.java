@@ -39,5 +39,6 @@ public class Paper {
     @Field("end_date")
     private Date endDate;
 
-
+    @Field("status")
+    private Integer status;
 }
