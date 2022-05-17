@@ -17,7 +17,7 @@ public class CourseVO {
 
     private String courseName;
 
-    private List<UserVO> studentIdList;
+    private List<User> studentIdList;
 
     private User teacherId;
 }
