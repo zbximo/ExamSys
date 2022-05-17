@@ -19,7 +19,7 @@ public interface UserRepository extends MongoRepository<User, String> {
     User findByUserId(String id);
 
     void deleteByUserId(String userId);
-    @Query(fields = "{'password':0}")
+
     List<User> findByName(String userName);
 
 }

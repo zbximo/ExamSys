@@ -34,7 +34,7 @@ public class AnswerSheet {
      */
     @DBRef
     @Field("student_id")
-    private User userId;
+    private User student;
     /**
      * 回答详情
      */

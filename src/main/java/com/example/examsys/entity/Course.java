@@ -24,7 +24,7 @@ public class Course {
     /**
      * 课程名
      */
-    @Field("class_name")
+    @Field("course_name")
     private String courseName;
 
     /**
@@ -32,14 +32,14 @@ public class Course {
      */
     @DBRef
     @Field("student_ids")
-    private List<User> studentIdList;
+    private List<User> studentList;
 
     /**
      * 上课教师
      */
     @DBRef
     @Field("teacher_id")
-    private User teacherId;
+    private User teacher;
 
     @Field("course_closed")
     private Integer isClosed;

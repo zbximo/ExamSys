@@ -29,7 +29,7 @@ public class CourseController {
      * @return
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResponseData addUser(@RequestBody CourseDTO courseDTO) {
+    public ResponseData addCourse(@RequestBody CourseDTO courseDTO) {
         String id = courseService.addCourse(courseDTO);
         logger.warn("create course id: {} ", id);
         return new ResponseData(ExceptionMsg.CREATE_SUCCESS, id);

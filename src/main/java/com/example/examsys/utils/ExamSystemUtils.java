@@ -7,20 +7,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 
 /**
- * @author pengbin
- * @version 1.0
- * @date 2022/04/14 22:23
+ * @author: ximo
+ * @date: 2022/5/14 16:57
+ * @description:
  */
-public class ZuccEchoUtils {
+public class ExamSystemUtils {
     private static ObjectMapper mapper = new ObjectMapper();
-    public static String generateCacheKey(String ...values){
-        //子系统code
-        String ret = "zuccecho:";
-        for(String v : values){
-            ret = ret + v + ":";
-        }
-        return ret;
-    }
 
     /**
      * bean 转换成 json
@@ -41,4 +33,5 @@ public class ZuccEchoUtils {
         }
         return "";
     }
+
 }
