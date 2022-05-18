@@ -16,11 +16,13 @@ import java.util.List;
 @Data
 @Document(collection = "Course")
 public class Course {
+
     /**
      * 课程ID
      */
     @Id
     private String courseId;
+
     /**
      * 课程名
      */

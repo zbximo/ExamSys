@@ -9,9 +9,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface CourseRepository extends MongoRepository<Course,String> {
+public interface CourseRepository extends MongoRepository<Course, String> {
     /**
      * 返回学生列表有该用户ID的所有课程，即学的课
+     *
      * @param user 带用户ID即可
      * @return
      */
@@ -19,10 +20,11 @@ public interface CourseRepository extends MongoRepository<Course,String> {
 
     /**
      * 返回课程教师为该用户ID的课程，即教的课
+     *
      * @param id 用户ID
      * @return
      */
     List<Course> findByTeacher_UserId(String id);
 
-
+    Course findByCourseId(String id);
 }

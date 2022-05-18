@@ -29,7 +29,5 @@ public interface UserService {
     String modifyPwd(String id, String oldPwd,
                      String newPwd);
 
-    List<Course> getCoursesTaught(String teacherId);
 
-    List<Course> getCoursesLearned(String studentId);
 }

@@ -1,5 +1,6 @@
 package com.example.examsys.form.ToService;
 
+import com.example.examsys.entity.Course;
 import com.example.examsys.entity.Question;
 import lombok.Data;
 
@@ -15,6 +16,8 @@ import java.util.List;
 public class PaperDTO {
 
     private String paperTitle;
+
+    private Course course;
 
     private List<Question> questionList;
 

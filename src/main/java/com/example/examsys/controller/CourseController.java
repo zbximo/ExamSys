@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @author: ximo
  * @date: 2022/5/16 19:40
@@ -48,6 +50,7 @@ public class CourseController {
 
     /**
      * 通过课程ID查询课程
+     *
      * @param id 课程ID
      * @return
      */
@@ -57,5 +60,33 @@ public class CourseController {
         logger.warn("query course id: {}", id);
         return new ResponseData(ExceptionMsg.QUERY_SUCCESS, course);
 
+    }
+
+    /**
+     * 通过用户Id获取该用户所有课程
+     *
+     * @param id 用户Id
+     * @return
+     */
+    @RequestMapping(value = "/getCoursesLearned", method = RequestMethod.GET)
+    public Response getCoursesLearned(@RequestParam("id") String id) {
+
+        List<Course> courseList = courseService.getCoursesLearned(id);
+        logger.warn("query courses learned");
+        return new ResponseData(ExceptionMsg.SUCCESS, courseList);
+    }
+
+    /**
+     * 通过用户Id获取该用户所有课程
+     *
+     * @param id 用户Id
+     * @return
+     */
+    @RequestMapping(value = "/getCoursesTaught", method = RequestMethod.GET)
+    public Response getCoursesTaught(@RequestParam("id") String id) {
+
+        List<Course> courseList = courseService.getCoursesTaught(id);
+        logger.warn("query courses taught");
+        return new ResponseData(ExceptionMsg.SUCCESS, courseList);
     }
 }

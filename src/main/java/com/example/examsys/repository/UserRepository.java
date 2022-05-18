@@ -16,6 +16,7 @@ import java.util.List;
 
 @Repository
 public interface UserRepository extends MongoRepository<User, String> {
+
     User findByUserId(String id);
 
     void deleteByUserId(String userId);

@@ -17,6 +17,7 @@ import java.util.List;
 @Data
 @Document(collection = "Paper")
 public class Paper {
+
     @Id
     private String paperId;
 

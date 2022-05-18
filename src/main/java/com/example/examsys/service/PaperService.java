@@ -4,6 +4,8 @@ import com.example.examsys.entity.Paper;
 import com.example.examsys.form.ToService.PaperDTO;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author:Benjamin
  * @Date:2022/5/17 9:02
@@ -16,4 +18,6 @@ public interface PaperService {
     String deletePaper(String id);
 
     Paper findById(String id);
+
+    List<Paper> findByCourseId(String id);
 }

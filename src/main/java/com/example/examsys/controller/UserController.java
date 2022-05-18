@@ -114,33 +114,5 @@ class UserController {
         return new ResponseData(ExceptionMsg.SUCCESS, userId);
     }
 
-    /**
-     * 通过用户Id获取该用户所有课程
-     *
-     * @param id 用户Id
-     * @return
-     */
-    @RequestMapping(value = "/getCoursesLearned", method = RequestMethod.GET)
-    public Response getCoursesLearned(@RequestParam("id") String id) {
-
-        List<Course> courseList = userService.getCoursesLearned(id);
-        logger.warn("query courses learned");
-        return new ResponseData(ExceptionMsg.SUCCESS, courseList);
-    }
-
-    /**
-     * 通过用户Id获取该用户所有课程
-     *
-     * @param id 用户Id
-     * @return
-     */
-    @RequestMapping(value = "/getCoursesTaught", method = RequestMethod.GET)
-    public Response getCoursesTaught(@RequestParam("id") String id) {
-
-        List<Course> courseList = userService.getCoursesTaught(id);
-        logger.warn("query courses taught");
-        return new ResponseData(ExceptionMsg.SUCCESS, courseList);
-    }
-
 
 }

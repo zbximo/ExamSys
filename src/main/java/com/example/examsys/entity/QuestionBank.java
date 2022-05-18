@@ -1,5 +1,6 @@
 package com.example.examsys.entity;
 
+import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
@@ -14,8 +15,10 @@ import java.util.Map;
  * @date: 2022/5/15 11:39
  * @description:
  */
-@Document(indexName = "QuestionBank", replicas = 0, shards = 5)
+@Data
+@Document(indexName = "question_bank", replicas = 0, shards = 5)
 public class QuestionBank {
+
     @Id
     @Field(type = FieldType.Keyword)
     private String questionId;

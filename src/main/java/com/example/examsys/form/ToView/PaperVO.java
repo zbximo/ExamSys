@@ -7,10 +7,11 @@ import java.util.Date;
 /**
  * @author: Benjamin
  * @Date: 2022/5/17 22:01
- * @description: 创建考试
+ * @description: 试卷基本信息
  **/
 @Data
 public class PaperVO {
+    private String answerSheetId;
 
     private String paperId;
 

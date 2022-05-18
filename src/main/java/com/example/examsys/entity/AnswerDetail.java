@@ -11,6 +11,7 @@ import java.util.List;
  */
 @Data
 public class AnswerDetail {
+
     /**
      * 回答列表
      */

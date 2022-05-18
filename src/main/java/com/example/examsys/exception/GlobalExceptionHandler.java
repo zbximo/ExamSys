@@ -1,7 +1,6 @@
 package com.example.examsys.exception;
 
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -57,6 +56,7 @@ public class GlobalExceptionHandler {
         //发生异常进行日志记录，写入数据库或者其他处理，此处省略
         return map;
     }
+
     /**
      * 400 - Bad Request
      */
@@ -88,9 +88,9 @@ public class GlobalExceptionHandler {
         FieldError error = result.getFieldError();
         String field = error.getField();
         String code = error.getDefaultMessage();
-        String message =  String.format("%s:%s", field, code);
+        String message = String.format("%s:%s", field, code);
         map.put("rspCode", 400);
-        map.put("rspMsg",message);
+        map.put("rspMsg", message);
         //发生异常进行日志记录，写入数据库或者其他处理，此处省略
         return map;
     }
@@ -112,6 +112,7 @@ public class GlobalExceptionHandler {
         //发生异常进行日志记录，写入数据库或者其他处理，此处省略
         return map;
     }
+
     /**
      * 400 - Bad Request
      */

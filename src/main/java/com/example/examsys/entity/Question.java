@@ -18,18 +18,22 @@ public class Question {
      * 题目
      */
     private String questionTitle;
+
     /**
      * 题目类型
      */
     private Integer questionType;
+
     /**
      * 题目选项
      */
     private List<String> options;
+
     /**
      * 题目参考答案
      */
     private List<String> trueAnswer;
+
     /**
      * 题目默认分数
      */

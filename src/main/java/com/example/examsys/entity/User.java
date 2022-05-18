@@ -17,12 +17,16 @@ import java.util.Map;
 @Data
 @Document(collection = "User")
 public class User {
+
     @Id
     private String userId;
+
     @Field("name")
     private String name;
+
     @Field("password")
     private String password;
+
     /**
      * 这个type只区分是否为管理员
      */
