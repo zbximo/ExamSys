@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface CourseService {
+
     String addCourse(CourseDTO courseDTO);
 
     String deleteCourse(String id);

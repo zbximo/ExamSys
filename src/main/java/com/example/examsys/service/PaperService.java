@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
  **/
 @Service
 public interface PaperService {
+
     String addPaper(PaperDTO paperDTO);
 
     String deletePaper(String id);

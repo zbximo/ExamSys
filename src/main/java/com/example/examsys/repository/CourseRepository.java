@@ -15,14 +15,14 @@ public interface CourseRepository extends MongoRepository<Course,String> {
      * @param user 带用户ID即可
      * @return
      */
-    @Query(fields = "{'studentList.password':0}")
     List<Course> findByStudentListContains(User user);
 
     /**
      * 返回课程教师为该用户ID的课程，即教的课
-     * @param user 带用户ID即可
+     * @param id 用户ID
      * @return
      */
-    List<Course> findByTeacher(User user);
+    List<Course> findByTeacher_UserId(String id);
+
 
 }

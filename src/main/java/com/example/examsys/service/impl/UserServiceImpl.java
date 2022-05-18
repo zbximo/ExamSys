@@ -154,9 +154,8 @@ class UserServiceImpl implements UserService {
 
     @Override
     public List<Course> getCoursesTaught(String teacherId) {
-        User u = new User();
-        u.setUserId(teacherId);
-        return courseRepository.findByTeacher(u);
+
+        return courseRepository.findByTeacher_UserId(teacherId);
     }
 
     @Override
