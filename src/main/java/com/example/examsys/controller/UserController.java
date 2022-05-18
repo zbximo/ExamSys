@@ -43,7 +43,7 @@ class UserController {
      * @return
      */
     @RequestMapping(value = "/modifyType", method = RequestMethod.POST)
-    public ResponseData modifyType(@RequestBody String userId) {
+    public ResponseData modifyType(@RequestParam("id") String userId) {
         String id = userService.modifyType(userId);
         logger.warn("user id: {} to Teacher", id);
         return new ResponseData(ExceptionMsg.UPDATE_SUCCESS, id);

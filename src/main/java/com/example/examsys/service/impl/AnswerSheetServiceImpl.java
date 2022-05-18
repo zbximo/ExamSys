@@ -70,7 +70,7 @@ public class AnswerSheetServiceImpl implements AnswerSheetService {
     @Override
     public List<AnswerSheetBasicInfoVO> teacherGetAnswerSheetsBasicInfo(String paperId) {
 
-        List<AnswerSheet> answerSheetList = answerSheetRepository.teacherGetAnswerSheets(paperId);
+        List<AnswerSheet> answerSheetList = answerSheetRepository.findByPaper_PaperId(paperId);
         List<AnswerSheetBasicInfoVO> answerSheetBasicInfoVOList = new ArrayList<>();
         for (AnswerSheet answerSheet : answerSheetList) {
             AnswerSheetBasicInfoVO answerSheetBasicInfoVO = new AnswerSheetBasicInfoVO();
@@ -85,7 +85,7 @@ public class AnswerSheetServiceImpl implements AnswerSheetService {
     @Override
     public List<PaperVO> studentGetPapers(String studentId, String courseId) {
 
-        List<AnswerSheet> answerSheetList = answerSheetRepository.studentGetAnswerSheets(studentId, courseId);
+        List<AnswerSheet> answerSheetList = answerSheetRepository.findByStudent_UserIdAndPaper_Course_CourseId(studentId, courseId);
         List<PaperVO> paperVOList = new ArrayList<>();
         for (AnswerSheet answerSheet : answerSheetList) {
             PaperVO paperVO = new PaperVO();
@@ -102,13 +102,13 @@ public class AnswerSheetServiceImpl implements AnswerSheetService {
 
     @Override
     public AnswerSheet getAnswerSheet(String studentId, String paperId) {
-        AnswerSheet answerSheet = answerSheetRepository.getAnswerSheet(studentId, paperId);
+        AnswerSheet answerSheet = answerSheetRepository.findByStudent_UserIdAndPaper_PaperId(studentId, paperId);
         return answerSheet;
     }
 
     @Override
     public String startExam(String studentId, String paperId) {
-        AnswerSheet answerSheet = answerSheetRepository.getAnswerSheet(studentId, paperId);
+        AnswerSheet answerSheet = answerSheetRepository.findByStudent_UserIdAndPaper_PaperId(studentId, paperId);
         answerSheet.setStatus(Constants.A_EXAM_ING);
         return answerSheet.getAnswerSheetId();
     }

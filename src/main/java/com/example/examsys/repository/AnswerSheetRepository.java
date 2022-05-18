@@ -13,17 +13,13 @@ import java.util.List;
 public interface AnswerSheetRepository extends MongoRepository<AnswerSheet, String> {
 //    @Query(value = "{'$and':[{'answerSheetId':?0},{'paper.paperId':?1}]}")
 
-    @Query(value = "{'paper.course.courseId':?0}")
-    AnswerSheet teacherGetPapers(String courseId);
+    AnswerSheet findByPaper_Course_CourseId(String courseId);
 
     AnswerSheet findByAnswerSheetId(String answerSheetId);
 
-    @Query(value = "{'paper.paperId':?0}")
-    List<AnswerSheet> teacherGetAnswerSheets(String paperId);
+    List<AnswerSheet> findByPaper_PaperId(String paperId);
 
-    @Query(value = "{'$and':[{'studentId':?0},{'paper.courseId':?1}]}")
-    List<AnswerSheet> studentGetAnswerSheets(String studentId, String courseId);
+    List<AnswerSheet> findByStudent_UserIdAndPaper_Course_CourseId(String studentId, String courseId);
 
-    @Query(value = "{'$and':[{'studentId':?0},{'paper.paperId':?1}]}")
-    AnswerSheet getAnswerSheet(String studentId, String paperId);
+    AnswerSheet findByStudent_UserIdAndPaper_PaperId(String studentId, String paperId);
 }
