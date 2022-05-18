@@ -29,5 +29,5 @@ public interface UserService {
     String modifyPwd(String id, String oldPwd,
                      String newPwd);
 
-
+    String modifyType(String id);
 }

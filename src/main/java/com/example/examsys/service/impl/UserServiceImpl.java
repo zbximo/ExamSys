@@ -27,6 +27,7 @@ class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     @Autowired
     private CourseRepository courseRepository;
+
     /**
      * @param userDTO 用户信息
      * @return
@@ -37,13 +38,13 @@ class UserServiceImpl implements UserService {
         BeanUtils.copyProperties(userDTO, user);
         if (user.getUserId() == null || user.getUserId().equals("")) {
             throw new BusinessException(Constants.PARAM_ERROR, "用户账号为空");
-        } else if (userRepository.findByUserId(user.getUserId())!=null){
+        } else if (userRepository.findByUserId(user.getUserId()) != null) {
             throw new BusinessException(Constants.PARAM_ERROR, "用户名已存在");
-        }
-        else if (user.getPassword() == null || user.getPassword().equals("")) {
+        } else if (user.getPassword() == null || user.getPassword().equals("")) {
             throw new BusinessException(Constants.PARAM_ERROR, "密码为空");
         }
         user.setPassword(MD5Util.getEncryptedPwd(user.getPassword()));
+        user.setType(Constants.U_CATEGORY_STUDENT);
         userRepository.save(user);
         return user.getUserId();
     }
@@ -120,7 +121,7 @@ class UserServiceImpl implements UserService {
         System.out.println(user);
         if (user == null) {
             throw new BusinessException(Constants.QUERY_EMPTY, "用户不存在");
-        } else if (!MD5Util.validPassword(password,user.getPassword())) {
+        } else if (!MD5Util.validPassword(password, user.getPassword())) {
             throw new BusinessException(Constants.QUERY_EMPTY, "密码错误");
         } else {
             return id;
@@ -143,7 +144,7 @@ class UserServiceImpl implements UserService {
 
         if (user == null) {
             throw new BusinessException(Constants.QUERY_EMPTY, "用户不存在");
-        } else if (!MD5Util.validPassword(oldPwd,user.getPassword())) {
+        } else if (!MD5Util.validPassword(oldPwd, user.getPassword())) {
             throw new BusinessException(Constants.QUERY_EMPTY, "旧密码错误");
         } else {
             user.setPassword(MD5Util.getEncryptedPwd(newPwd));
@@ -152,7 +153,21 @@ class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public String modifyType(String id) {
+        if (id.equals("")) {
+            throw new BusinessException(Constants.PARAM_ERROR, "用户ID不能为空");
+        }
+        User user = userRepository.findByUserId(id);
 
+        if (user == null) {
+            throw new BusinessException(Constants.QUERY_EMPTY, "用户不存在");
+        } else {
+            user.setType(Constants.U_CATEGORY_TEACHER);
+            userRepository.save(user);
+            return user.getUserId();
+        }
+    }
 
 
 }

@@ -29,11 +29,24 @@ class UserController {
      * @param userDTO 用户信息
      * @return
      */
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResponseData addUser(@RequestBody UserDTO userDTO) {
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public ResponseData register(@RequestBody UserDTO userDTO) {
         String id = userService.addUser(userDTO);
         logger.warn("create student id: {} ", id);
         return new ResponseData(ExceptionMsg.CREATE_SUCCESS, id);
+    }
+
+    /**
+     * 管理员 设置 老师
+     *
+     * @param userId 用户ID
+     * @return
+     */
+    @RequestMapping(value = "/modifyType", method = RequestMethod.POST)
+    public ResponseData modifyType(@RequestBody String userId) {
+        String id = userService.modifyType(userId);
+        logger.warn("user id: {} to Teacher", id);
+        return new ResponseData(ExceptionMsg.UPDATE_SUCCESS, id);
     }
 
     /**
@@ -111,7 +124,7 @@ class UserController {
 
         String userId = userService.modifyPwd(id, oldPwd, newPwd);
         logger.warn("student id: {} modified password", userId);
-        return new ResponseData(ExceptionMsg.SUCCESS, userId);
+        return new ResponseData(ExceptionMsg.UPDATE_SUCCESS, userId);
     }
 
 
