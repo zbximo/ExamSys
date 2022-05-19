@@ -127,6 +127,7 @@ class UserServiceImpl implements UserService {
             throw new BusinessException(Constants.QUERY_EMPTY, "密码错误");
         } else {
             HashMap<String, Object> map = new HashMap<>();
+            String token = null;
             try {
                 //登录Service
                 HashMap<String, String> payload = new HashMap<>();
@@ -134,16 +135,13 @@ class UserServiceImpl implements UserService {
                 payload.put("userName", user.getName());
 
                 //生成JWT令牌
-                String token = JWTUtils.getToken(payload);
-                map.put("state", true);
-                map.put("msg", "认证成功");
+                token = JWTUtils.getToken(payload);
                 //响应token
                 map.put("token", token);
+                map.put("role", user.getType());
             } catch (Exception e) {
-                map.put("state", false);
                 map.put("msg", e.getMessage());
             }
-            System.out.println(map);
             return map;
 //            return id;
         }
