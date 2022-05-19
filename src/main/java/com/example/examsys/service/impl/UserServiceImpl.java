@@ -1,6 +1,5 @@
 package com.example.examsys.service.impl;
 
-import com.example.examsys.entity.Course;
 import com.example.examsys.entity.User;
 import com.example.examsys.exception.BusinessException;
 import com.example.examsys.form.ToService.UserDTO;
@@ -9,11 +8,13 @@ import com.example.examsys.repository.UserRepository;
 import com.example.examsys.service.UserService;
 import com.example.examsys.utils.Constants;
 import com.example.examsys.utils.ExamSystemUtils;
+import com.example.examsys.utils.JWTUtils;
 import com.example.examsys.utils.MD5Util;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -43,7 +44,8 @@ class UserServiceImpl implements UserService {
         } else if (user.getPassword() == null || user.getPassword().equals("")) {
             throw new BusinessException(Constants.PARAM_ERROR, "密码为空");
         }
-        user.setPassword(MD5Util.getEncryptedPwd(user.getPassword()));
+//        user.setPassword(MD5Util.getEncryptedPwd(user.getPassword()));
+        user.setPassword(user.getPassword());
         user.setType(Constants.U_CATEGORY_STUDENT);
         userRepository.save(user);
         return user.getUserId();
@@ -113,7 +115,7 @@ class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public String login(String id, String password) {
+    public HashMap<String, Object> login(String id, String password) {
         if (id.equals("") || password.equals("")) {
             throw new BusinessException(Constants.PARAM_ERROR, "用户名密码不能为空");
         }
@@ -121,10 +123,29 @@ class UserServiceImpl implements UserService {
         System.out.println(user);
         if (user == null) {
             throw new BusinessException(Constants.QUERY_EMPTY, "用户不存在");
-        } else if (!MD5Util.validPassword(password, user.getPassword())) {
+        } else if (!password.equals(user.getPassword())) {
             throw new BusinessException(Constants.QUERY_EMPTY, "密码错误");
         } else {
-            return id;
+            HashMap<String, Object> map = new HashMap<>();
+            try {
+                //登录Service
+                HashMap<String, String> payload = new HashMap<>();
+                payload.put("userId", user.getUserId());
+                payload.put("userName", user.getName());
+
+                //生成JWT令牌
+                String token = JWTUtils.getToken(payload);
+                map.put("state", true);
+                map.put("msg", "认证成功");
+                //响应token
+                map.put("token", token);
+            } catch (Exception e) {
+                map.put("state", false);
+                map.put("msg", e.getMessage());
+            }
+            System.out.println(map);
+            return map;
+//            return id;
         }
     }
 
@@ -142,12 +163,21 @@ class UserServiceImpl implements UserService {
         }
         User user = userRepository.findByUserId(id);
 
+//        if (user == null) {
+//            throw new BusinessException(Constants.QUERY_EMPTY, "用户不存在");
+//        } else if (!MD5Util.validPassword(oldPwd, user.getPassword())) {
+//            throw new BusinessException(Constants.QUERY_EMPTY, "旧密码错误");
+//        } else {
+//            user.setPassword(MD5Util.getEncryptedPwd(newPwd));
+//            userRepository.save(user);
+//            return user.getUserId();
+//        }
         if (user == null) {
             throw new BusinessException(Constants.QUERY_EMPTY, "用户不存在");
-        } else if (!MD5Util.validPassword(oldPwd, user.getPassword())) {
+        } else if (!oldPwd.equals(user.getPassword())) {
             throw new BusinessException(Constants.QUERY_EMPTY, "旧密码错误");
         } else {
-            user.setPassword(MD5Util.getEncryptedPwd(newPwd));
+            user.setPassword(newPwd);
             userRepository.save(user);
             return user.getUserId();
         }
