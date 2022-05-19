@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -107,9 +108,9 @@ class UserController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Response login(@RequestParam("id") String id, @RequestParam("password") String password) {
 
-        String userId = userService.login(id, password);
-        logger.info("student id: {} login", userId);
-        return new ResponseData(ExceptionMsg.SUCCESS, userId);
+        HashMap<String, Object> token = userService.login(id, password);
+        logger.info("student id: {} login", id);
+        return new ResponseData(ExceptionMsg.SUCCESS, token);
     }
 
     /**

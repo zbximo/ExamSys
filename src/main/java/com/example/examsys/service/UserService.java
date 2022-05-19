@@ -1,10 +1,10 @@
 package com.example.examsys.service;
 
-import com.example.examsys.entity.Course;
 import com.example.examsys.entity.User;
 import com.example.examsys.form.ToService.UserDTO;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -24,7 +24,7 @@ public interface UserService {
 
     List<User> getAll();
 
-    String login(String id, String password);
+    HashMap<String, Object> login(String id, String password);
 
     String modifyPwd(String id, String oldPwd,
                      String newPwd);
