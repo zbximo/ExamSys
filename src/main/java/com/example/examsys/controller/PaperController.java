@@ -2,7 +2,6 @@ package com.example.examsys.controller;
 
 import com.example.examsys.entity.Paper;
 import com.example.examsys.form.ToService.PaperDTO;
-import com.example.examsys.form.ToService.UserDTO;
 import com.example.examsys.form.ToView.PaperVO;
 import com.example.examsys.result.ExceptionMsg;
 import com.example.examsys.result.Response;
@@ -87,6 +86,6 @@ public class PaperController {
     public ResponseData studentGetPapers(@RequestParam("studentId") String studentId, @RequestParam("courseId") String courseId) {
         List<PaperVO> answerSheetBasicInfoVOList = answerSheetService.studentGetPapers(studentId, courseId);
         logger.warn("student id {} get course Id {}answerSheets  ", studentId, courseId);
-        return new ResponseData(ExceptionMsg.DELETE_SUCCESS, answerSheetBasicInfoVOList);
+        return new ResponseData(ExceptionMsg.QUERY_SUCCESS, answerSheetBasicInfoVOList);
     }
 }
