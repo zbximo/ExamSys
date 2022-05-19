@@ -21,7 +21,7 @@ public class PaperDTO {
 
     private List<Question> questionList;
 
-    private Date startDate;
+    private String startDate;
 
-    private Date endDate;
+    private String endDate;
 }

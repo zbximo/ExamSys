@@ -4,12 +4,15 @@ import com.example.examsys.entity.AnswerSheet;
 import com.example.examsys.entity.Course;
 import com.example.examsys.entity.Paper;
 import com.example.examsys.entity.User;
+import com.example.examsys.exception.BusinessException;
 import com.example.examsys.form.ToService.PaperDTO;
 import com.example.examsys.repository.AnswerSheetRepository;
 import com.example.examsys.repository.CourseRepository;
 import com.example.examsys.repository.PaperRepository;
 import com.example.examsys.service.PaperService;
 import com.example.examsys.utils.Constants;
+import com.example.examsys.utils.DateFormatUtil;
+import com.example.examsys.utils.DynamicTask;
 import org.bson.types.ObjectId;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,18 +33,23 @@ public class PaperServiceImpl implements PaperService {
     private CourseRepository courseRepository;
     @Autowired
     private AnswerSheetRepository answerSheetRepository;
+    @Autowired
+    private DynamicTask dynamicTask;
 
     public void addBlankAnswerSheet(Paper paper) {
         String courseId = paper.getCourse().getCourseId();
         Course course = courseRepository.findByCourseId(courseId);
-        for (User user : course.getStudentList()) {
-            AnswerSheet answerSheet = new AnswerSheet();
-            answerSheet.setAnswerSheetId(new ObjectId().toString());
-            answerSheet.setStatus(Constants.P_STATUS_NOT_START);
-            answerSheet.setStudent(user);
-            answerSheet.setPaper(paper);
-            answerSheetRepository.save(answerSheet);
+        if (course.getStudentList().size() != 0) {
+            for (User user : course.getStudentList()) {
+                AnswerSheet answerSheet = new AnswerSheet();
+                answerSheet.setAnswerSheetId(new ObjectId().toString());
+                answerSheet.setStatus(Constants.P_STATUS_NOT_START);
+                answerSheet.setStudent(user);
+                answerSheet.setPaper(paper);
+                answerSheetRepository.save(answerSheet);
+            }
         }
+
     }
 
     @Override
@@ -51,8 +59,17 @@ public class PaperServiceImpl implements PaperService {
         String pid = new ObjectId().toString();
         paper.setPaperId(pid);
         paper.setCreateDate(new Date(System.currentTimeMillis()));
+        try {
+            paper.setStartDate(DateFormatUtil.str2date(paperDTO.getStartDate()));
+            paper.setEndDate(DateFormatUtil.str2date(paperDTO.getEndDate()));
+        } catch (Exception e) {
+            throw new BusinessException(400,e.toString());
+        }
+
         paper.setStatus(Constants.P_STATUS_NOT_START);
         //TODO 定时任务 试卷开启 关闭
+        dynamicTask.startCron(paper);
+        //TODO 消息队列
         addBlankAnswerSheet(paper);
         paperRepository.save(paper);
         return pid;
