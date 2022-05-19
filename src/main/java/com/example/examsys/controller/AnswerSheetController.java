@@ -6,8 +6,11 @@ import com.example.examsys.form.ToView.AnswerSheetBasicInfoVO;
 import com.example.examsys.form.ToView.PaperVO;
 import com.example.examsys.repository.AnswerSheetRepository;
 import com.example.examsys.result.ExceptionMsg;
+import com.example.examsys.result.Response;
 import com.example.examsys.result.ResponseData;
 import com.example.examsys.service.AnswerSheetService;
+import com.example.examsys.utils.LocalUser;
+import org.apache.tomcat.jni.Local;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +30,12 @@ public class AnswerSheetController {
     @Autowired
     private AnswerSheetRepository answerSheetRepository;
 
+    /**
+     * 测试用
+     *
+     * @param answerSheet 问卷
+     * @return
+     */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseData add(@RequestBody AnswerSheet answerSheet) {
         answerSheetRepository.save(answerSheet);
@@ -34,7 +43,7 @@ public class AnswerSheetController {
     }
 
     /**
-     * 提交答卷
+     * 可用于考生提交答卷
      *
      * @param answerSheetDTO 学生答卷信息
      * @return
@@ -43,11 +52,11 @@ public class AnswerSheetController {
     public ResponseData submitAnswerSheet(@RequestBody AnswerSheetDTO answerSheetDTO) {
         String id = answerSheetService.submitAnswerSheet(answerSheetDTO);
         logger.warn("create answerSheet id: {} ", id);
-        return new ResponseData(ExceptionMsg.UPDATE_SUCCESS, id);
+        return new ResponseData(ExceptionMsg.SUBMIT_SUCCESS, id);
     }
 
     /**
-     * 通过ID查看学生答题情况
+     * 可用于通过答卷ID查看学生答题情况
      *
      * @param id 答卷ID
      * @return
@@ -74,7 +83,7 @@ public class AnswerSheetController {
 
 
     /**
-     * 可用于学生查看自己试卷，老师查看学生试卷。
+     * 可用于老师查看学生试卷。
      *
      * @param studentId 学生Id
      * @param paperId   试卷Id
@@ -87,19 +96,45 @@ public class AnswerSheetController {
         return new ResponseData(ExceptionMsg.QUERY_SUCCESS, answerSheet);
     }
 
+    /**
+     * 可用于学生查看自己试卷。
+     *
+     * @param paperId 试卷Id
+     * @return
+     */
+    @RequestMapping(value = "/getByPaperId", method = RequestMethod.GET)
+    public ResponseData getAnswerSheet(@RequestParam("paperId") String paperId) {
+        AnswerSheet answerSheet = answerSheetService.getAnswerSheet(LocalUser.USER.get().getUserId(), paperId);
+        logger.warn("user id {} get answerSheet id: {} ", LocalUser.USER.get().getUserId(), answerSheet.getAnswerSheetId());
+        return new ResponseData(ExceptionMsg.QUERY_SUCCESS, answerSheet);
+    }
+
+    /**
+     * 用于考生开始考试
+     *
+     * @param paperId 问卷Id
+     * @return
+     */
     @RequestMapping(value = "/startExam", method = RequestMethod.GET)
-    public ResponseData startExam(@RequestParam("studentId") String studentId, @RequestParam("paperId") String paperId) {
-        String answerSheetId = answerSheetService.startExam(studentId, paperId);
-        logger.warn("student id: {} startExam", studentId);
-        return new ResponseData(ExceptionMsg.QUERY_SUCCESS, answerSheetId);
+    public Response startExam(@RequestParam("paperId") String paperId) {
+        String answerSheetId = answerSheetService.startExam(LocalUser.USER.get().getUserId(), paperId);
+        logger.warn("student id: {} startExam", LocalUser.USER.get().getUserId());
+        return new Response(ExceptionMsg.UPDATE_SUCCESS);
     }
 
 
+    /**
+     * 可用于老师批完试卷提交分数
+     *
+     * @param answerSheetId 答卷ID
+     * @param scores 所有题目分数
+     * @return
+     */
     @RequestMapping(value = "/rectify", method = RequestMethod.GET)
-    public ResponseData rectify(@RequestParam("answerSheetId") String answerSheetId, @RequestParam("scores") List<Double> scores) {
+    public Response rectify(@RequestParam("answerSheetId") String answerSheetId, @RequestParam("scores") List<Double> scores) {
         String id = answerSheetService.rectify(answerSheetId, scores);
         logger.warn("rectify answerSheet id: {} ", id);
-        return new ResponseData(ExceptionMsg.UPDATE_SUCCESS, id);
+        return new Response(ExceptionMsg.UPDATE_SUCCESS);
     }
 
 }

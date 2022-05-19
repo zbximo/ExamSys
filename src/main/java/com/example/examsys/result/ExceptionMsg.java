@@ -7,6 +7,7 @@ package com.example.examsys.result;
  * @description:
  */
 public enum ExceptionMsg {
+    SUBMIT_SUCCESS("200", "提交成功"),
     CREATE_SUCCESS("200", "添加成功"),
     UPDATE_SUCCESS("200", "更新成功"),
     DELETE_SUCCESS("200", "删除成功"),

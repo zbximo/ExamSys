@@ -1,12 +1,12 @@
 package com.example.examsys.controller;
 
 import com.example.examsys.entity.Course;
-import com.example.examsys.entity.User;
 import com.example.examsys.form.ToService.CourseDTO;
 import com.example.examsys.result.ExceptionMsg;
 import com.example.examsys.result.Response;
 import com.example.examsys.result.ResponseData;
 import com.example.examsys.service.CourseService;
+import com.example.examsys.utils.LocalUser;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +27,8 @@ public class CourseController {
     private CourseService courseService;
 
     /**
+     * 添加课程
+     *
      * @param courseDTO 课程信息
      * @return
      */
@@ -38,6 +40,8 @@ public class CourseController {
     }
 
     /**
+     * 删除课程
+     *
      * @param id 课程ID
      * @return
      */
@@ -49,7 +53,7 @@ public class CourseController {
     }
 
     /**
-     * 通过课程ID查询课程
+     * 通过课程ID查询课程，用于老师获取课程信息
      *
      * @param id 课程ID
      * @return
@@ -59,34 +63,29 @@ public class CourseController {
         Course course = courseService.findById(id);
         logger.warn("query course id: {}", id);
         return new ResponseData(ExceptionMsg.QUERY_SUCCESS, course);
-
     }
 
     /**
-     * 通过用户Id获取该用户所有课程
+     * 可以用获取学生学的所有课
      *
-     * @param id 用户Id
      * @return
      */
     @RequestMapping(value = "/getCoursesLearned", method = RequestMethod.GET)
-    public Response getCoursesLearned(@RequestParam("id") String id) {
-
-        List<Course> courseList = courseService.getCoursesLearned(id);
+    public Response getCoursesLearned() {
+        List<Course> courseList = courseService.getCoursesLearned(LocalUser.USER.get().getUserId());
         logger.warn("query courses learned");
-        return new ResponseData(ExceptionMsg.SUCCESS, courseList);
+        return new ResponseData(ExceptionMsg.QUERY_SUCCESS, courseList);
     }
 
     /**
-     * 通过用户Id获取该用户所有课程
+     * 可用于获取老师教的所有课
      *
-     * @param id 用户Id
      * @return
      */
     @RequestMapping(value = "/getCoursesTaught", method = RequestMethod.GET)
-    public Response getCoursesTaught(@RequestParam("id") String id) {
-
-        List<Course> courseList = courseService.getCoursesTaught(id);
+    public Response getCoursesTaught() {
+        List<Course> courseList = courseService.getCoursesTaught(LocalUser.USER.get().getUserId());
         logger.warn("query courses taught");
-        return new ResponseData(ExceptionMsg.SUCCESS, courseList);
+        return new ResponseData(ExceptionMsg.QUERY_SUCCESS, courseList);
     }
 }

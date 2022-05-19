@@ -8,6 +8,7 @@ import com.example.examsys.result.Response;
 import com.example.examsys.result.ResponseData;
 import com.example.examsys.service.AnswerSheetService;
 import com.example.examsys.service.PaperService;
+import com.example.examsys.utils.LocalUser;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -78,14 +79,13 @@ public class PaperController {
     /**
      * 学生获取一门课程的试卷信息
      *
-     * @param studentId 学生Id
      * @param courseId  课程Id
      * @return
      */
     @RequestMapping(value = "/studentGetPapers", method = RequestMethod.GET)
-    public ResponseData studentGetPapers(@RequestParam("studentId") String studentId, @RequestParam("courseId") String courseId) {
-        List<PaperVO> answerSheetBasicInfoVOList = answerSheetService.studentGetPapers(studentId, courseId);
-        logger.warn("student id {} get course Id {}answerSheets  ", studentId, courseId);
+    public ResponseData studentGetPapers(@RequestParam("courseId") String courseId) {
+        List<PaperVO> answerSheetBasicInfoVOList = answerSheetService.studentGetPapers(LocalUser.USER.get().getUserId(), courseId);
+        logger.warn("student id {} get course Id {}answerSheets  ", LocalUser.USER.get().getUserId(), courseId);
         return new ResponseData(ExceptionMsg.QUERY_SUCCESS, answerSheetBasicInfoVOList);
     }
 }

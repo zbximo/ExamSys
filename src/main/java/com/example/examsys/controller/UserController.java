@@ -10,6 +10,7 @@ import com.example.examsys.service.UserService;
 import com.example.examsys.utils.LocalUser;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Role;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -32,10 +33,10 @@ class UserController {
      * @return
      */
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseData register(@RequestBody UserDTO userDTO) {
+    public Response register(@RequestBody UserDTO userDTO) {
         String id = userService.addUser(userDTO);
         logger.warn("create student id: {} ", id);
-        return new ResponseData(ExceptionMsg.CREATE_SUCCESS, id);
+        return new Response(ExceptionMsg.CREATE_SUCCESS);
     }
 
     /**
@@ -45,10 +46,10 @@ class UserController {
      * @return
      */
     @RequestMapping(value = "/modifyType", method = RequestMethod.POST)
-    public ResponseData modifyType(@RequestParam("id") String userId) {
+    public Response modifyType(@RequestParam("id") String userId) {
         String id = userService.modifyType(userId);
         logger.warn("user id: {} to Teacher", id);
-        return new ResponseData(ExceptionMsg.UPDATE_SUCCESS, id);
+        return new Response(ExceptionMsg.UPDATE_SUCCESS);
     }
 
     /**
@@ -115,19 +116,18 @@ class UserController {
     }
 
     /**
-     * @param id     用户ID
      * @param oldPwd 用户原密码
      * @param newPwd 用户新密码
      * @return
      */
     @RequestMapping(value = "/modifyPwd", method = RequestMethod.POST)
-    public Response modifyPwd(@RequestParam("id") String id, @RequestParam("oldPwd") String oldPwd,
+    public Response modifyPwd(@RequestParam("oldPwd") String oldPwd,
                               @RequestParam("newPwd") String newPwd) {
 
-        String userId = userService.modifyPwd(id, oldPwd, newPwd);
+        String userId = userService.modifyPwd(LocalUser.USER.get().getUserId(), oldPwd, newPwd);
         logger.warn("student id: {} modified password", userId);
         logger.error(LocalUser.USER.get().getUserId());
-        return new ResponseData(ExceptionMsg.UPDATE_SUCCESS, userId);
+        return new Response(ExceptionMsg.UPDATE_SUCCESS);
     }
 
 
