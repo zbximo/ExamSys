@@ -1,4 +1,4 @@
-package com.example.examsys.Config;
+package com.example.examsys.config;
 
 /**
  * @author: Benjamin
