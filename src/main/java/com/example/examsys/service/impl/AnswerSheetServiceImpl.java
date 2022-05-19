@@ -2,12 +2,14 @@ package com.example.examsys.service.impl;
 
 import com.example.examsys.entity.AnswerDetail;
 import com.example.examsys.entity.AnswerSheet;
+import com.example.examsys.entity.Paper;
 import com.example.examsys.entity.Question;
 import com.example.examsys.exception.BusinessException;
 import com.example.examsys.form.ToService.AnswerSheetDTO;
 import com.example.examsys.form.ToView.AnswerSheetBasicInfoVO;
 import com.example.examsys.form.ToView.PaperVO;
 import com.example.examsys.repository.AnswerSheetRepository;
+import com.example.examsys.repository.PaperRepository;
 import com.example.examsys.service.AnswerSheetService;
 import com.example.examsys.utils.Constants;
 import org.springframework.beans.BeanUtils;
@@ -26,6 +28,8 @@ import java.util.List;
 public class AnswerSheetServiceImpl implements AnswerSheetService {
     @Autowired
     private AnswerSheetRepository answerSheetRepository;
+    @Autowired
+    private PaperRepository paperRepository;
 
     @Override
     public String submitAnswerSheet(AnswerSheetDTO answerSheetDTO) {
@@ -84,18 +88,20 @@ public class AnswerSheetServiceImpl implements AnswerSheetService {
 
     @Override
     public List<PaperVO> studentGetPapers(String studentId, String courseId) {
+        List<AnswerSheet> answerSheetList = answerSheetRepository.findByStudent_UserId(studentId);
 
-        List<AnswerSheet> answerSheetList = answerSheetRepository.findByStudent_UserIdAndPaper_Course_CourseId(studentId, courseId);
         List<PaperVO> paperVOList = new ArrayList<>();
         for (AnswerSheet answerSheet : answerSheetList) {
-            PaperVO paperVO = new PaperVO();
-            paperVO.setAnswerSheetId(answerSheet.getAnswerSheetId());
-            paperVO.setPaperId(answerSheet.getPaper().getPaperId());
-            paperVO.setPaperTitle(answerSheet.getPaper().getPaperTitle());
-            paperVO.setStartDate(answerSheet.getPaper().getStartDate());
-            paperVO.setEndDate(answerSheet.getPaper().getEndDate());
-            paperVO.setStatus(answerSheet.getStatus() > answerSheet.getPaper().getStatus() ? answerSheet.getStatus() : answerSheet.getPaper().getStatus());
-            paperVOList.add(paperVO);
+            if (answerSheet.getPaper().getCourse().getCourseId().equals(courseId)) {
+                PaperVO paperVO = new PaperVO();
+                paperVO.setAnswerSheetId(answerSheet.getAnswerSheetId());
+                paperVO.setPaperId(answerSheet.getPaper().getPaperId());
+                paperVO.setPaperTitle(answerSheet.getPaper().getPaperTitle());
+                paperVO.setStartDate(answerSheet.getPaper().getStartDate());
+                paperVO.setEndDate(answerSheet.getPaper().getEndDate());
+                paperVO.setStatus(answerSheet.getStatus() > answerSheet.getPaper().getStatus() ? answerSheet.getStatus() : answerSheet.getPaper().getStatus());
+                paperVOList.add(paperVO);
+            }
         }
         return paperVOList;
     }
@@ -120,6 +126,7 @@ public class AnswerSheetServiceImpl implements AnswerSheetService {
         for (int i = 0; i < answerDetailList.size(); i++) {
             answerSheet.getAnswerDetailList().get(i).setScore(scores.get(i));
         }
+        answerSheet.setStatus(Constants.A_RECTIFIED);
         System.out.println(answerSheet);
         answerSheetRepository.save(answerSheet);
         return answerSheetId;

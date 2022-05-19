@@ -19,7 +19,11 @@ public interface AnswerSheetRepository extends MongoRepository<AnswerSheet, Stri
 
     List<AnswerSheet> findByPaper_PaperId(String paperId);
 
-    List<AnswerSheet> findByStudent_UserIdAndPaper_Course_CourseId(String studentId, String courseId);
+    List<AnswerSheet> findByStudent_UserId(String studentId);
 
     AnswerSheet findByStudent_UserIdAndPaper_PaperId(String studentId, String paperId);
+
+//    @Query(value = "{'paper.paperId':{ $in: ?0 }}")
+//    @Query(value = "{'paper.paperId':'628488df917f907f9b8ad9d6'}")
+//    List<AnswerSheet> findByPaper_Pa(List<String> paperId);
 }

@@ -83,7 +83,7 @@ public class PaperController {
      * @param courseId  课程Id
      * @return
      */
-    @RequestMapping(value = "/studentGetPapers", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/studentGetPapers", method = RequestMethod.GET)
     public ResponseData studentGetPapers(@RequestParam("studentId") String studentId, @RequestParam("courseId") String courseId) {
         List<PaperVO> answerSheetBasicInfoVOList = answerSheetService.studentGetPapers(studentId, courseId);
         logger.warn("student id {} get course Id {}answerSheets  ", studentId, courseId);
