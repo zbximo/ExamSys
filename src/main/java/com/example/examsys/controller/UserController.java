@@ -1,6 +1,5 @@
 package com.example.examsys.controller;
 
-import com.example.examsys.entity.Course;
 import com.example.examsys.entity.User;
 import com.example.examsys.form.ToService.UserDTO;
 import com.example.examsys.result.ExceptionMsg;
@@ -10,7 +9,6 @@ import com.example.examsys.service.UserService;
 import com.example.examsys.utils.LocalUser;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Role;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;

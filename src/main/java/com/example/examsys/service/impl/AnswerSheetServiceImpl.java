@@ -2,7 +2,6 @@ package com.example.examsys.service.impl;
 
 import com.example.examsys.entity.AnswerDetail;
 import com.example.examsys.entity.AnswerSheet;
-import com.example.examsys.entity.Paper;
 import com.example.examsys.entity.Question;
 import com.example.examsys.exception.BusinessException;
 import com.example.examsys.form.ToService.AnswerSheetDTO;

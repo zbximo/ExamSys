@@ -1,15 +1,9 @@
 package com.example.examsys.controller;
 
-import com.example.examsys.entity.AnswerSheet;
-import com.example.examsys.entity.Course;
 import com.example.examsys.repository.AnswerSheetRepository;
 import com.example.examsys.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author: ximo

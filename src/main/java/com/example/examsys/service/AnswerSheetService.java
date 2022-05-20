@@ -30,6 +30,5 @@ public interface AnswerSheetService {
     String startExam(String studentId, String paperId);
 
     String rectify(String answerSheetId, List<Double> scores);
-//    CID -> List<Paper>( PaperVO 只获取试卷状态)   PaperId -> List<AnswerSheet> 老师
-//    UID+CID -> List<AnswerSheet> ( PaperVO 获取试卷和答卷状态)  UID+PID -> AnswerSheet
+
 }
