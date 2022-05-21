@@ -79,7 +79,7 @@ public class PaperController {
     /**
      * 学生获取一门课程的试卷信息
      *
-     * @param courseId  课程Id
+     * @param courseId 课程Id
      * @return
      */
     @RequestMapping(value = "/studentGetPapers", method = RequestMethod.GET)

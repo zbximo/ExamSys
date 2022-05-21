@@ -123,7 +123,7 @@ class UserServiceImpl implements UserService {
         System.out.println(user);
         if (user == null) {
             throw new BusinessException(Constants.QUERY_EMPTY, "用户不存在");
-        } else if (!MD5Util.validPassword(password,user.getPassword())) {
+        } else if (!MD5Util.validPassword(password, user.getPassword())) {
             throw new BusinessException(Constants.QUERY_EMPTY, "密码错误");
         } else {
             HashMap<String, Object> map = new HashMap<>();
@@ -143,7 +143,6 @@ class UserServiceImpl implements UserService {
                 map.put("msg", e.getMessage());
             }
             return map;
-//            return id;
         }
     }
 

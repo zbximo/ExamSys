@@ -125,7 +125,7 @@ public class AnswerSheetController {
      * 可用于老师批完试卷提交分数
      *
      * @param answerSheetId 答卷ID
-     * @param scores 所有题目分数
+     * @param scores        所有题目分数
      * @return
      */
     @RequestMapping(value = "/rectify", method = RequestMethod.GET)

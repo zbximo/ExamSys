@@ -27,9 +27,6 @@ public class User {
     @Field("password")
     private String password;
 
-    /**
-     * 这个type只区分是否为管理员
-     */
     @Field("type")
     private Integer type;
 

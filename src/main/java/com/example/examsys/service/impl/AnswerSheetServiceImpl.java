@@ -36,8 +36,7 @@ public class AnswerSheetServiceImpl implements AnswerSheetService {
         BeanUtils.copyProperties(answerSheetDTO, answerSheet);
         answerSheet.setSubmitDate(new Date(System.currentTimeMillis()));
         answerSheet.setAnswerDetailList(answerSheetDTO.getAnswerDetailList());
-        answerSheet.setStatus(Constants.A_NOT_RECTIFY);
-        System.out.println(answerSheet.toString());
+        boolean hasSubject = false;
         int len = answerSheet.getAnswerDetailList().size();
         List<Question> questionList = answerSheet.getPaper().getQuestionList();
         List<AnswerDetail> answerDetailList = answerSheetDTO.getAnswerDetailList();
@@ -51,9 +50,16 @@ public class AnswerSheetServiceImpl implements AnswerSheetService {
                 if (question.getTrueAnswer().containsAll(answerDetail.getAnswer())) {
                     answerDetailList.get(i).setScore(question.getScore());
                 }
+            } else {
+                answerDetailList.get(i).setScore(0.);
+                hasSubject = true;
             }
         }
-
+        if (hasSubject) {
+            answerSheet.setStatus(Constants.A_NOT_RECTIFY);
+        } else {
+            answerSheet.setStatus(Constants.A_RECTIFIED);
+        }
         answerSheetRepository.save(answerSheet);
         return answerSheetDTO.getAnswerSheetId();
     }
@@ -115,6 +121,7 @@ public class AnswerSheetServiceImpl implements AnswerSheetService {
     public String startExam(String studentId, String paperId) {
         AnswerSheet answerSheet = answerSheetRepository.findByStudent_UserIdAndPaper_PaperId(studentId, paperId);
         answerSheet.setStatus(Constants.A_EXAM_ING);
+        answerSheetRepository.save(answerSheet);
         return answerSheet.getAnswerSheetId();
     }
 
@@ -126,7 +133,6 @@ public class AnswerSheetServiceImpl implements AnswerSheetService {
             answerSheet.getAnswerDetailList().get(i).setScore(scores.get(i));
         }
         answerSheet.setStatus(Constants.A_RECTIFIED);
-        System.out.println(answerSheet);
         answerSheetRepository.save(answerSheet);
         return answerSheetId;
     }

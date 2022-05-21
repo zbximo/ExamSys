@@ -39,6 +39,8 @@ public class PaperServiceImpl implements PaperService {
     public void addBlankAnswerSheet(Paper paper) {
         String courseId = paper.getCourse().getCourseId();
         Course course = courseRepository.findByCourseId(courseId);
+        System.out.println(course);
+        System.out.println(courseId);
         if (course.getStudentList().size() != 0) {
             for (User user : course.getStudentList()) {
                 AnswerSheet answerSheet = new AnswerSheet();
@@ -63,7 +65,7 @@ public class PaperServiceImpl implements PaperService {
             paper.setStartDate(DateFormatUtil.str2date(paperDTO.getStartDate()));
             paper.setEndDate(DateFormatUtil.str2date(paperDTO.getEndDate()));
         } catch (Exception e) {
-            throw new BusinessException(400,e.toString());
+            throw new BusinessException(400, e.toString());
         }
 
         paper.setStatus(Constants.P_STATUS_NOT_START);
