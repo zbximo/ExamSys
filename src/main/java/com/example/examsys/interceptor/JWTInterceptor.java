@@ -24,8 +24,10 @@ public class JWTInterceptor implements HandlerInterceptor {
         HashMap<String, Object> map = new HashMap<>();
         //获取请求头中的令牌
         String token = request.getHeader("token");
+        System.out.println(request.getMethod());
         try {
             //验证令牌
+            System.out.println(token);
             JWTUtils.verify(token);
             User user = JWTUtils.getUser(token);
             LocalUser.USER.set(user);
