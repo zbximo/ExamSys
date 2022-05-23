@@ -83,7 +83,8 @@ public class DynamicTask {
             paper.setStatus(Constants.P_STATUS_START);
             paperRepository.save(paper);
             logger.info("paperId:{} exam start", this.paperId);
-            DynamicTask.map.remove(this.paperId);
+            future = DynamicTask.map.remove(paperId);
+            future.cancel(true);
         }
     }
 

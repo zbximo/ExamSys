@@ -10,12 +10,10 @@ import com.example.examsys.service.QuestionBankService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: ximo
@@ -38,19 +36,27 @@ public class QuestionBankController {
         return new ResponseData(ExceptionMsg.CREATE_SUCCESS, id);
     }
 
-    @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public Page<QuestionBank> searchByPage(Integer start, Integer pageSize, String title, String field) {
-        return questionBankService.searchByPage(start, pageSize, title, field);
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public ResponseData update(@RequestBody QuestionBank questionBank) {
+        questionBankService.update(questionBank);
+        logger.warn("update question to Bank id: {} ", questionBank.getQuestionId());
+        return new ResponseData(ExceptionMsg.CREATE_SUCCESS, questionBank.getQuestionId());
+    }
+
+    @RequestMapping(value = "/search/{start}/{page_size}/{title}/{field}", method = RequestMethod.GET)
+    public ResponseData searchByPage(@PathVariable Integer start, @PathVariable("page_size") Integer pageSize,
+                                     @PathVariable String title, @PathVariable String field) {
+        return new ResponseData(ExceptionMsg.QUERY_SUCCESS, questionBankService.searchByPage(start, pageSize, title, field));
     }
 
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
-    public List<QuestionBank> getAll() {
-        return questionBankService.getAll();
+    public ResponseData getAll() {
+        return new ResponseData(ExceptionMsg.QUERY_SUCCESS, questionBankService.getAll());
     }
 
-    @RequestMapping(value = "/createPaper", method = RequestMethod.POST)
-    public List<QuestionBank> createPaperIntelligent(@RequestBody ParamsDTO paramsDTO) {
-        return questionBankService.createPapersIntelligent(paramsDTO);
+    @RequestMapping(value = "/create_paper", method = RequestMethod.POST)
+    public ResponseData createPaperIntelligent(@RequestBody ParamsDTO paramsDTO) {
+        return new ResponseData(ExceptionMsg.QUERY_SUCCESS, questionBankService.createPapersIntelligent(paramsDTO));
     }
 
 

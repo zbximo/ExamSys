@@ -1,5 +1,6 @@
 package com.example.examsys.service;
 
+import com.example.examsys.form.ToView.statistics.QuestionDetailVO;
 import com.example.examsys.form.ToView.statistics.ScoreVO;
 import org.springframework.stereotype.Service;
 
@@ -14,4 +15,6 @@ import java.util.List;
 public interface AnalysisService {
 
     List<ScoreVO> getScoreRank(String paperId);
+
+    List<QuestionDetailVO> getQuestionDetail(String paperId);
 }

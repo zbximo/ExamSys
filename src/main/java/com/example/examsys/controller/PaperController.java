@@ -43,8 +43,8 @@ public class PaperController {
      * @param id 试卷ID
      * @return
      */
-    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    public Response deletePaper(@RequestParam("id") String id) {
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+    public Response deletePaper(@PathVariable("id") String id) {
         String pid = paperService.deletePaper(id);
         logger.warn("delete paper id: {} ", pid);
         return new Response(ExceptionMsg.DELETE_SUCCESS);
@@ -56,8 +56,8 @@ public class PaperController {
      * @param id 试卷ID
      * @return
      */
-    @RequestMapping(value = "/viewPaperById", method = RequestMethod.GET)
-    public ResponseData viewPaperById(@RequestParam("id") String id) {
+    @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
+    public ResponseData viewPaperById(@PathVariable("id") String id) {
         Paper paper = paperService.findById(id);
         logger.warn("query paper id: {}", id);
         return new ResponseData(ExceptionMsg.QUERY_SUCCESS, paper);
@@ -69,8 +69,8 @@ public class PaperController {
      * @param courseId 课程Id
      * @return
      */
-    @RequestMapping(value = "/teacherGetPapers", method = RequestMethod.GET)
-    public ResponseData teacherGetPapers(@RequestParam("courseId") String courseId) {
+    @RequestMapping(value = "/teacher_get_papers/{course_id}", method = RequestMethod.GET)
+    public ResponseData teacherGetPapers(@PathVariable("course_id") String courseId) {
         List<Paper> papers = paperService.findByCourseId(courseId);
         logger.warn("query papers of course id{}", courseId);
         return new ResponseData(ExceptionMsg.QUERY_SUCCESS, papers);
@@ -82,8 +82,8 @@ public class PaperController {
      * @param courseId 课程Id
      * @return
      */
-    @RequestMapping(value = "/studentGetPapers", method = RequestMethod.GET)
-    public ResponseData studentGetPapers(@RequestParam("courseId") String courseId) {
+    @RequestMapping(value = "/student_get_papers/{course_id}", method = RequestMethod.GET)
+    public ResponseData studentGetPapers(@PathVariable("course_id") String courseId) {
         List<PaperVO> answerSheetBasicInfoVOList = answerSheetService.studentGetPapers(LocalUser.USER.get().getUserId(), courseId);
         logger.warn("student id {} get course Id {}answerSheets  ", LocalUser.USER.get().getUserId(), courseId);
         return new ResponseData(ExceptionMsg.QUERY_SUCCESS, answerSheetBasicInfoVOList);

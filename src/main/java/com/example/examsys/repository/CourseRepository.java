@@ -27,4 +27,6 @@ public interface CourseRepository extends MongoRepository<Course, String> {
     List<Course> findByTeacher_UserId(String id);
 
     Course findByCourseId(String id);
+
+    void deleteByCourseId(String id);
 }

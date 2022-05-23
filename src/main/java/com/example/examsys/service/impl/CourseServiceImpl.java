@@ -2,6 +2,7 @@ package com.example.examsys.service.impl;
 
 import com.example.examsys.entity.Course;
 import com.example.examsys.entity.User;
+import com.example.examsys.exception.BusinessException;
 import com.example.examsys.form.ToService.CourseDTO;
 import com.example.examsys.repository.CourseRepository;
 import com.example.examsys.service.CourseService;
@@ -37,7 +38,8 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public String deleteCourse(String id) {
-        return null;
+        courseRepository.deleteByCourseId(id);
+        return id;
     }
 
     @Override

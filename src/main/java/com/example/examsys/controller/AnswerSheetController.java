@@ -1,5 +1,6 @@
 package com.example.examsys.controller;
 
+import cn.yueshutong.springbootstartercurrentlimiting.annotation.CurrentLimiter;
 import com.example.examsys.entity.AnswerSheet;
 import com.example.examsys.form.ToService.AnswerSheetDTO;
 import com.example.examsys.form.ToView.AnswerSheetBasicInfoVO;
@@ -59,8 +60,8 @@ public class AnswerSheetController {
      * @param id 答卷ID
      * @return
      */
-    @RequestMapping(value = "/viewById", method = RequestMethod.GET)
-    public ResponseData viewAnswerSheetById(@RequestParam("id") String id) {
+    @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
+    public ResponseData viewAnswerSheetById(@PathVariable("id") String id) {
         AnswerSheet answerSheet = answerSheetService.findById(id);
         logger.warn("query answerSheet id: {}", id);
         return new ResponseData(ExceptionMsg.QUERY_SUCCESS, answerSheet);
@@ -72,8 +73,8 @@ public class AnswerSheetController {
      * @param paperId 试卷ID
      * @return
      */
-    @RequestMapping(value = "/teacherGetBasicInfo", method = RequestMethod.GET)
-    public ResponseData teacherGetAnswerSheetsBasicInfo(@RequestParam("paperId") String paperId) {
+    @RequestMapping(value = "/teacher_get_basic_info/{paper_id}", method = RequestMethod.GET)
+    public ResponseData teacherGetAnswerSheetsBasicInfo(@PathVariable("paper_id") String paperId) {
         List<AnswerSheetBasicInfoVO> answerSheetList = answerSheetService.teacherGetAnswerSheetsBasicInfo(paperId);
         logger.warn("teacher id {} check answerSheetsBasicInfo of paperId: {} ", 1, paperId);
         return new ResponseData(ExceptionMsg.QUERY_SUCCESS, answerSheetList);
@@ -87,8 +88,8 @@ public class AnswerSheetController {
      * @param paperId   试卷Id
      * @return
      */
-    @RequestMapping(value = "/getByStudentIdAndPaperId", method = RequestMethod.GET)
-    public ResponseData getAnswerSheet(@RequestParam("studentId") String studentId, @RequestParam("paperId") String paperId) {
+    @RequestMapping(value = "/get/{student_id}/{paper_id}", method = RequestMethod.GET)
+    public ResponseData getAnswerSheet(@PathVariable("student_id") String studentId, @PathVariable("paper_id") String paperId) {
         AnswerSheet answerSheet = answerSheetService.getAnswerSheet(studentId, paperId);
         logger.warn("user id {} get answerSheet id: {} ", studentId, answerSheet.getAnswerSheetId());
         return new ResponseData(ExceptionMsg.QUERY_SUCCESS, answerSheet);
@@ -100,8 +101,8 @@ public class AnswerSheetController {
      * @param paperId 试卷Id
      * @return
      */
-    @RequestMapping(value = "/getByPaperId", method = RequestMethod.GET)
-    public ResponseData getAnswerSheet(@RequestParam("paperId") String paperId) {
+    @RequestMapping(value = "/get/{paper_id}", method = RequestMethod.GET)
+    public ResponseData getAnswerSheet(@PathVariable("paper_id") String paperId) {
         AnswerSheet answerSheet = answerSheetService.getAnswerSheet(LocalUser.USER.get().getUserId(), paperId);
         logger.warn("user id {} get answerSheet id: {} ", LocalUser.USER.get().getUserId(), answerSheet.getAnswerSheetId());
         return new ResponseData(ExceptionMsg.QUERY_SUCCESS, answerSheet);
@@ -113,11 +114,12 @@ public class AnswerSheetController {
      * @param paperId 问卷Id
      * @return
      */
-    @RequestMapping(value = "/startExam", method = RequestMethod.GET)
-    public Response startExam(@RequestParam("paperId") String paperId) {
-        String answerSheetId = answerSheetService.startExam(LocalUser.USER.get().getUserId(), paperId);
+    @RequestMapping(value = "/start_exam", method = RequestMethod.GET)
+    @CurrentLimiter(QPS = 5)
+    public ResponseData startExam(@RequestParam("paperId") String paperId) {
+        AnswerSheet answerSheet = answerSheetService.startExam(LocalUser.USER.get().getUserId(), paperId);
         logger.warn("student id: {} startExam", LocalUser.USER.get().getUserId());
-        return new Response(ExceptionMsg.UPDATE_SUCCESS);
+        return new ResponseData(ExceptionMsg.UPDATE_SUCCESS, answerSheet);
     }
 
 

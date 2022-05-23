@@ -1,11 +1,14 @@
 package com.example.examsys.service.impl;
 
 import com.example.examsys.entity.QuestionBank;
+import com.example.examsys.exception.BusinessException;
 import com.example.examsys.form.ToService.ParamsDTO;
 import com.example.examsys.form.ToService.QuestionBankDTO;
 import com.example.examsys.repository.QuestionBankRepository;
+import com.example.examsys.result.ExceptionMsg;
 import com.example.examsys.service.QuestionBankService;
 import org.bson.types.ObjectId;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.sort.SortBuilders;
@@ -26,6 +29,7 @@ import java.util.*;
  */
 @Service
 public class QuestionBankServiceImpl implements QuestionBankService {
+
     @Autowired
     private QuestionBankRepository questionBankRepository;
 
@@ -40,6 +44,15 @@ public class QuestionBankServiceImpl implements QuestionBankService {
     }
 
     @Override
+    public boolean update(QuestionBank questionBank) {
+        if (questionBank.getQuestionId() == null) {
+            throw new BusinessException(500, "未传题目ID");
+        }
+        questionBankRepository.save(questionBank);
+        return true;
+    }
+
+    @Override
     public Page<QuestionBank> searchByPage(Integer start, Integer pageSize, String title, String field) {
         // 分页：
         if (start == null) {
@@ -48,9 +61,28 @@ public class QuestionBankServiceImpl implements QuestionBankService {
         System.out.println(start);
         System.out.println(title);
         NativeSearchQueryBuilder nativeSearchQueryBuilderQueryBuilder = new NativeSearchQueryBuilder();
-        QueryBuilder query1 = QueryBuilders.multiMatchQuery(title, "questionTitle");
-        QueryBuilder query2 = QueryBuilders.multiMatchQuery(field, "questionField");
-        nativeSearchQueryBuilderQueryBuilder.withQuery(QueryBuilders.boolQuery().should(query1).should(query2));
+        BoolQueryBuilder boolQueryBuilder = null;
+        if (!field.equals("") && !title.equals("")) {
+            boolQueryBuilder = QueryBuilders.boolQuery().filter(
+                    QueryBuilders.boolQuery()
+                            .must(QueryBuilders.matchQuery("questionTitle", title))
+                            .must(QueryBuilders.matchQuery("questionField", field))
+            );
+        } else if (!title.equals("")) {
+            boolQueryBuilder = QueryBuilders.boolQuery().filter(
+                    QueryBuilders.boolQuery()
+                            .must(QueryBuilders.matchQuery("questionTitle", title))
+            );
+        } else if (!field.equals("")) {
+            boolQueryBuilder = QueryBuilders.boolQuery().filter(
+                    QueryBuilders.boolQuery()
+                            .must(QueryBuilders.matchQuery("questionField", field))
+            );
+        } else {
+            boolQueryBuilder = QueryBuilders.boolQuery();
+        }
+        assert boolQueryBuilder != null;
+        nativeSearchQueryBuilderQueryBuilder.withQuery(boolQueryBuilder);
         nativeSearchQueryBuilderQueryBuilder.withSort(SortBuilders.fieldSort("questionId.keyword").order(SortOrder.ASC));
         nativeSearchQueryBuilderQueryBuilder.withPageable(PageRequest.of(start, pageSize));
         Page<QuestionBank> questionBankPage = questionBankRepository.search(nativeSearchQueryBuilderQueryBuilder.build());
@@ -62,10 +94,17 @@ public class QuestionBankServiceImpl implements QuestionBankService {
     }
 
 
-    public List<QuestionBank> getRandomList(List<QuestionBank> list, ParamsDTO paramsDTO) {
+    public Map<String, Object> getRandomList(List<QuestionBank> list, ParamsDTO paramsDTO) {
+        System.out.println(1111);
+        Map<String, Object> map = new HashMap<>();
         List<QuestionBank> olist = new ArrayList<>();
         Map<Integer, List<Integer>> indexMap = new HashMap<>();
         List<Integer> index = new ArrayList<>();
+        Map<String, Integer> missMap = new HashMap<>();
+        missMap.put("Single", paramsDTO.getSingle());
+        missMap.put("Multi", paramsDTO.getMulti());
+        missMap.put("Judgment", paramsDTO.getJudgment());
+        missMap.put("Subject", paramsDTO.getSubject());
         for (int i = 0; i < list.size(); i++) {
             Integer type = list.get(i).getQuestionType();
             List<Integer> tmpList = new ArrayList<>();
@@ -77,23 +116,50 @@ public class QuestionBankServiceImpl implements QuestionBankService {
         }
         indexMap.forEach(
                 (type, l) -> {
+                    System.out.println(type);
+                    System.out.println(l);
                     Collections.shuffle(l);
                     List<Integer> newList = new ArrayList<>();
                     switch (type) {
+
                         case 0: {
-                            newList = l.subList(0, paramsDTO.getSingle());
+                            int x = l.size() >= paramsDTO.getSingle() ? 0 : paramsDTO.getSingle() - l.size();
+                            missMap.put("Single", x);
+                            if (x == 0) {
+                                newList = l.subList(0, paramsDTO.getSingle());
+                            } else {
+                                newList = l.subList(0, l.size());
+                            }
                             break;
                         }
                         case 1: {
-                            newList = l.subList(0, paramsDTO.getMulti());
+                            int x = l.size() >= paramsDTO.getSingle() ? 0 : paramsDTO.getSingle() - l.size();
+                            missMap.put("Multi", x);
+                            if (x == 0) {
+                                newList = l.subList(0, paramsDTO.getSingle());
+                            } else {
+                                newList = l.subList(0, l.size());
+                            }
                             break;
                         }
                         case 2: {
-                            newList = l.subList(0, paramsDTO.getJudgment());
+                            int x = l.size() >= paramsDTO.getSingle() ? 0 : paramsDTO.getSingle() - l.size();
+                            missMap.put("Judgment", x);
+                            if (x == 0) {
+                                newList = l.subList(0, paramsDTO.getSingle());
+                            } else {
+                                newList = l.subList(0, l.size());
+                            }
                             break;
                         }
                         case 3: {
-                            newList = l.subList(0, paramsDTO.getSubject());
+                            int x = l.size() >= paramsDTO.getSingle() ? 0 : paramsDTO.getSingle() - l.size();
+                            missMap.put("Subject", x);
+                            if (x == 0) {
+                                newList = l.subList(0, paramsDTO.getSingle());
+                            } else {
+                                newList = l.subList(0, l.size());
+                            }
                             break;
                         }
                     }
@@ -106,18 +172,44 @@ public class QuestionBankServiceImpl implements QuestionBankService {
                     olist.add(list.get(i));
                 }
         );
-        return olist;
+        map.put("questionList", olist);
+        map.put("missInfo", missMap);
+        return map;
     }
 
     @Override
-    public List<QuestionBank> createPapersIntelligent(ParamsDTO paramsDTO) {
+    public Map<String, Object> createPapersIntelligent(ParamsDTO paramsDTO) {
         NativeSearchQueryBuilder nativeSearchQueryBuilderQueryBuilder = new NativeSearchQueryBuilder();
-        QueryBuilder query1 = QueryBuilders.multiMatchQuery(paramsDTO.getTitle(), "questionTitle");
-        QueryBuilder query2 = QueryBuilders.multiMatchQuery(paramsDTO.getField(), "questionField");
-        nativeSearchQueryBuilderQueryBuilder.withQuery(QueryBuilders.boolQuery().should(query1).should(query2));
+        BoolQueryBuilder boolQueryBuilder = null;
+        String title = paramsDTO.getTitle();
+        String field = paramsDTO.getField();
+        if (!field.equals("") && !title.equals("")) {
+            boolQueryBuilder = QueryBuilders.boolQuery().filter(
+                    QueryBuilders.boolQuery()
+                            .must(QueryBuilders.matchQuery("questionTitle", paramsDTO.getTitle()))
+                            .must(QueryBuilders.matchQuery("questionField", paramsDTO.getField()))
+            );
+        } else if (!title.equals("")) {
+            boolQueryBuilder = QueryBuilders.boolQuery().filter(
+                    QueryBuilders.boolQuery()
+                            .must(QueryBuilders.matchQuery("questionTitle", paramsDTO.getTitle()))
+            );
+        } else if (!field.equals("")) {
+            boolQueryBuilder = QueryBuilders.boolQuery().filter(
+                    QueryBuilders.boolQuery()
+                            .must(QueryBuilders.matchQuery("questionField", paramsDTO.getField()))
+            );
+        } else {
+            boolQueryBuilder = QueryBuilders.boolQuery();
+        }
+//        QueryBuilder query1 = QueryBuilders.multiMatchQuery(paramsDTO.getTitle(), "questionTitle");
+//        QueryBuilder query2 = QueryBuilders.multiMatchQuery(paramsDTO.getField(), "questionField");
+//        nativeSearchQueryBuilderQueryBuilder.withQuery(QueryBuilders.boolQuery().must(query1).must(query2));
+        assert boolQueryBuilder != null;
+        nativeSearchQueryBuilderQueryBuilder.withQuery(boolQueryBuilder);
         nativeSearchQueryBuilderQueryBuilder.withSort(SortBuilders.fieldSort("questionType").order(SortOrder.ASC));
         Page<QuestionBank> questionBankPage = questionBankRepository.search(nativeSearchQueryBuilderQueryBuilder.build());
-
+        System.out.println(222);
         return getRandomList(questionBankPage.getContent(), paramsDTO);
     }
 

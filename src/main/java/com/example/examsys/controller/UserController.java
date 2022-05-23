@@ -1,5 +1,6 @@
 package com.example.examsys.controller;
 
+import cn.yueshutong.springbootstartercurrentlimiting.annotation.CurrentLimiter;
 import com.example.examsys.entity.User;
 import com.example.examsys.form.ToService.UserDTO;
 import com.example.examsys.result.ExceptionMsg;
@@ -43,8 +44,8 @@ class UserController {
      * @param userId 用户ID
      * @return
      */
-    @RequestMapping(value = "/modifyType", method = RequestMethod.POST)
-    public Response modifyType(@RequestParam("id") String userId) {
+    @RequestMapping(value = "/modify_type/{id}", method = RequestMethod.GET)
+    public Response modifyType(@PathVariable("id") String userId) {
         String id = userService.modifyType(userId);
         logger.warn("user id: {} to Teacher", id);
         return new Response(ExceptionMsg.UPDATE_SUCCESS);
@@ -54,8 +55,8 @@ class UserController {
      * @param id 用户ID
      * @return
      */
-    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    public Response deleteUser(@RequestParam("id") String id) {
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+    public Response deleteUser(@PathVariable String id) {
         String sid = userService.deleteUser(id);
         logger.warn("delete student id: {} ", sid);
         return new Response(ExceptionMsg.DELETE_SUCCESS);
@@ -67,8 +68,8 @@ class UserController {
      * @param id 用户ID
      * @return
      */
-    @RequestMapping(value = "/viewUserById", method = RequestMethod.GET)
-    public ResponseData viewUserById(@RequestParam("id") String id) {
+    @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
+    public ResponseData viewUserById(@PathVariable String id) {
         User user = userService.findById(id);
         logger.warn("query student id: {}", id);
         return new ResponseData(ExceptionMsg.QUERY_SUCCESS, user);
@@ -80,8 +81,8 @@ class UserController {
      * @param name 用户姓名
      * @return
      */
-    @RequestMapping(value = "/viewUsersByName", method = RequestMethod.GET)
-    public ResponseData viewUserByName(@RequestParam("name") String name) {
+    @RequestMapping(value = "/view/{name}", method = RequestMethod.GET)
+    public ResponseData viewUserByName(@PathVariable String name) {
         List<User> userList = userService.findByName(name);
         logger.warn("query students name: {}", name);
         return new ResponseData(ExceptionMsg.QUERY_SUCCESS, userList);
@@ -106,6 +107,7 @@ class UserController {
      * @return
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @CurrentLimiter(QPS = 5)
     public Response login(@RequestParam("id") String id, @RequestParam("password") String password) {
 
         HashMap<String, Object> token = userService.login(id, password);

@@ -27,7 +27,7 @@ public interface AnswerSheetService {
 
     AnswerSheet getAnswerSheet(String studentId, String paperId);
 
-    String startExam(String studentId, String paperId);
+    AnswerSheet startExam(String studentId, String paperId);
 
     String rectify(String answerSheetId, List<Double> scores);
 

@@ -11,6 +11,7 @@ import com.example.examsys.repository.AnswerSheetRepository;
 import com.example.examsys.repository.PaperRepository;
 import com.example.examsys.service.AnswerSheetService;
 import com.example.examsys.utils.Constants;
+import com.example.examsys.utils.RedisUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,8 @@ public class AnswerSheetServiceImpl implements AnswerSheetService {
     private AnswerSheetRepository answerSheetRepository;
     @Autowired
     private PaperRepository paperRepository;
+    @Autowired
+    private RedisUtil redisUtil;
 
     @Override
     public String submitAnswerSheet(AnswerSheetDTO answerSheetDTO) {
@@ -118,11 +121,17 @@ public class AnswerSheetServiceImpl implements AnswerSheetService {
     }
 
     @Override
-    public String startExam(String studentId, String paperId) {
+    public AnswerSheet startExam(String studentId, String paperId) {
+        // TODO 缓存 （key: paperId+studentId+examStatus, value: status）
+        if (redisUtil.exists(studentId + paperId)) {
+            throw new BusinessException(400, "不能重复进行考试");
+        }
         AnswerSheet answerSheet = answerSheetRepository.findByStudent_UserIdAndPaper_PaperId(studentId, paperId);
         answerSheet.setStatus(Constants.A_EXAM_ING);
+        redisUtil.set(studentId + paperId + "examStatus", String.valueOf(Constants.A_EXAM_ING));
+
         answerSheetRepository.save(answerSheet);
-        return answerSheet.getAnswerSheetId();
+        return answerSheet;
     }
 
     @Override

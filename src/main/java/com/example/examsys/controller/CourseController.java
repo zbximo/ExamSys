@@ -45,8 +45,8 @@ public class CourseController {
      * @param id 课程ID
      * @return
      */
-    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    public Response deleteCourse(@RequestParam("id") String id) {
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+    public Response deleteCourse(@PathVariable("id") String id) {
         String cid = courseService.deleteCourse(id);
         logger.warn("delete course id: {} ", cid);
         return new Response(ExceptionMsg.DELETE_SUCCESS);
@@ -58,8 +58,8 @@ public class CourseController {
      * @param id 课程ID
      * @return
      */
-    @RequestMapping(value = "/viewCourseById", method = RequestMethod.GET)
-    public ResponseData viewCourseById(@RequestParam("id") String id) {
+    @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
+    public ResponseData viewCourseById(@PathVariable("id") String id) {
         Course course = courseService.findById(id);
         logger.warn("query course id: {}", id);
         return new ResponseData(ExceptionMsg.QUERY_SUCCESS, course);
@@ -70,7 +70,7 @@ public class CourseController {
      *
      * @return
      */
-    @RequestMapping(value = "/getCoursesLearned", method = RequestMethod.GET)
+    @RequestMapping(value = "/get_courses_learned", method = RequestMethod.GET)
     public Response getCoursesLearned() {
         List<Course> courseList = courseService.getCoursesLearned(LocalUser.USER.get().getUserId());
         logger.warn("query courses learned");
@@ -82,7 +82,7 @@ public class CourseController {
      *
      * @return
      */
-    @RequestMapping(value = "/getCoursesTaught", method = RequestMethod.GET)
+    @RequestMapping(value = "/get_courses_taught", method = RequestMethod.GET)
     public Response getCoursesTaught() {
         List<Course> courseList = courseService.getCoursesTaught(LocalUser.USER.get().getUserId());
         logger.warn("query courses taught");
