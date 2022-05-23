@@ -25,5 +25,9 @@ public class Constants {
     public static final Integer A_NOT_RECTIFY = 4; // 待批阅
     public static final Integer A_RECTIFIED = 5; // 已批阅
 
+    public static final String U_STATUS_ONLINE = "online";
+    public static final String U_STATUS_EXAMING = "examing";
+
+    public static final String REDIS_USER_NAME = "userStatus";
 
 }

@@ -64,6 +64,7 @@ public class AnswerSheetServiceImpl implements AnswerSheetService {
             answerSheet.setStatus(Constants.A_RECTIFIED);
         }
         answerSheetRepository.save(answerSheet);
+        redisUtil.set(answerSheet.getStudent().getUserId() + Constants.REDIS_USER_NAME, Constants.U_STATUS_ONLINE);
         return answerSheetDTO.getAnswerSheetId();
     }
 
@@ -123,13 +124,12 @@ public class AnswerSheetServiceImpl implements AnswerSheetService {
     @Override
     public AnswerSheet startExam(String studentId, String paperId) {
         // TODO 缓存 （key: paperId+studentId+examStatus, value: status）
-        if (redisUtil.exists(studentId + paperId)) {
+        if (redisUtil.exists(studentId + paperId + "examStatus")) {
             throw new BusinessException(400, "不能重复进行考试");
         }
         AnswerSheet answerSheet = answerSheetRepository.findByStudent_UserIdAndPaper_PaperId(studentId, paperId);
         answerSheet.setStatus(Constants.A_EXAM_ING);
-        redisUtil.set(studentId + paperId + "examStatus", String.valueOf(Constants.A_EXAM_ING));
-
+        redisUtil.update(studentId + paperId + "examStatus", Constants.U_STATUS_EXAMING);
         answerSheetRepository.save(answerSheet);
         return answerSheet;
     }

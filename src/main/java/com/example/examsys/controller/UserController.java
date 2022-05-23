@@ -108,11 +108,19 @@ class UserController {
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @CurrentLimiter(QPS = 5)
-    public Response login(@RequestParam("id") String id, @RequestParam("password") String password) {
+    public ResponseData login(@RequestParam("id") String id, @RequestParam("password") String password) {
 
         HashMap<String, Object> token = userService.login(id, password);
         logger.info("student id: {} login", id);
         return new ResponseData(ExceptionMsg.SUCCESS, token);
+    }
+
+    @RequestMapping(value = "/logout", method = RequestMethod.POST)
+    public Response logout(@RequestParam("id") String id) {
+
+        boolean x = userService.logout(id);
+        logger.info("student id: {} login", id);
+        return new Response(ExceptionMsg.SUCCESS);
     }
 
     /**

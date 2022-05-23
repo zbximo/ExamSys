@@ -3,6 +3,7 @@ package com.example.examsys.interceptor;
 import cn.yueshutong.springbootstartercurrentlimiting.annotation.CurrentLimiter;
 import cn.yueshutong.springbootstartercurrentlimiting.handler.CurrentAspectHandler;
 import com.example.examsys.result.Response;
+import com.example.examsys.result.ResponseData;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.springframework.stereotype.Component;
 
@@ -15,8 +16,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class CurrentLimitHandler implements CurrentAspectHandler {
     @Override
-    public Response around(ProceedingJoinPoint pjp, CurrentLimiter rateLimiter) {
-        return new Response("500", "系统繁忙，请稍后重试");
+    public ResponseData around(ProceedingJoinPoint pjp, CurrentLimiter rateLimiter) {
+        return new ResponseData("500", "系统繁忙，请稍后重试");
     }
 }
 

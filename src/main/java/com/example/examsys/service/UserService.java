@@ -26,6 +26,8 @@ public interface UserService {
 
     HashMap<String, Object> login(String id, String password);
 
+    boolean logout(String id);
+
     String modifyPwd(String id, String oldPwd,
                      String newPwd);
 

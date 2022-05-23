@@ -6,10 +6,7 @@ import com.example.examsys.form.ToService.UserDTO;
 import com.example.examsys.repository.CourseRepository;
 import com.example.examsys.repository.UserRepository;
 import com.example.examsys.service.UserService;
-import com.example.examsys.utils.Constants;
-import com.example.examsys.utils.ExamSystemUtils;
-import com.example.examsys.utils.JWTUtils;
-import com.example.examsys.utils.MD5Util;
+import com.example.examsys.utils.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +25,8 @@ class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     @Autowired
     private CourseRepository courseRepository;
+    @Autowired
+    private RedisUtil redisUtil;
 
     /**
      * @param userDTO 用户信息
@@ -119,6 +118,7 @@ class UserServiceImpl implements UserService {
         if (id.equals("") || password.equals("")) {
             throw new BusinessException(Constants.PARAM_ERROR, "用户名密码不能为空");
         }
+
         User user = userRepository.findByUserId(id);
         System.out.println(user);
         if (user == null) {
@@ -138,12 +138,35 @@ class UserServiceImpl implements UserService {
                 token = JWTUtils.getToken(payload);
                 //响应token
                 map.put("token", token);
-                map.put("role", user.getType());
+                map.put("user", user);
             } catch (Exception e) {
                 map.put("msg", e.getMessage());
             }
+            String status = null;
+            if (redisUtil.exists(id + Constants.REDIS_USER_NAME)) {
+                status = redisUtil.get(id + Constants.REDIS_USER_NAME);
+                if (status.equals(Constants.U_STATUS_EXAMING)) {
+                    throw new BusinessException(500, "用户考试中,不能异地登陆");
+                }
+            } else {
+                redisUtil.set(id + Constants.REDIS_USER_NAME, Constants.U_STATUS_ONLINE);
+            }
             return map;
         }
+    }
+
+    /**
+     * @param id 用户ID
+     * @return
+     */
+    @Override
+    public boolean logout(String id) {
+        try {
+            redisUtil.delete(id + Constants.REDIS_USER_NAME);
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+        return true;
     }
 
     /**
