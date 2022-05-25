@@ -49,7 +49,7 @@ public class QuestionBankController {
         return new ResponseData(ExceptionMsg.QUERY_SUCCESS, questionBankService.searchByPage(start, pageSize, title, field));
     }
 
-    @RequestMapping(value = "/getAll", method = RequestMethod.GET)
+    @RequestMapping(value = "/get_all", method = RequestMethod.GET)
     public ResponseData getAll() {
         return new ResponseData(ExceptionMsg.QUERY_SUCCESS, questionBankService.getAll());
     }

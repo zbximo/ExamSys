@@ -44,7 +44,7 @@ class UserController {
      * @param userId 用户ID
      * @return
      */
-    @RequestMapping(value = "/modify_type/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/modify_type/{id}", method = RequestMethod.POST)
     public Response modifyType(@PathVariable("id") String userId) {
         String id = userService.modifyType(userId);
         logger.warn("user id: {} to Teacher", id);
@@ -91,7 +91,7 @@ class UserController {
     /**
      * @return
      */
-    @RequestMapping(value = "/getAll", method = RequestMethod.GET)
+    @RequestMapping(value = "/get_all", method = RequestMethod.GET)
     public ResponseData getAll() {
         List<User> list = userService.getAll();
         logger.warn("query all students");

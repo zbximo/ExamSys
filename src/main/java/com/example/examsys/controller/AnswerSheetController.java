@@ -114,9 +114,9 @@ public class AnswerSheetController {
      * @param paperId 问卷Id
      * @return
      */
-    @RequestMapping(value = "/start_exam", method = RequestMethod.GET)
+    @RequestMapping(value = "/start_exam/{paper_id}", method = RequestMethod.GET)
     @CurrentLimiter(QPS = 5)
-    public ResponseData startExam(@RequestParam("paperId") String paperId) {
+    public ResponseData startExam(@PathVariable String paperId) {
         AnswerSheet answerSheet = answerSheetService.startExam(LocalUser.USER.get().getUserId(), paperId);
         logger.warn("student id: {} startExam", LocalUser.USER.get().getUserId());
         return new ResponseData(ExceptionMsg.UPDATE_SUCCESS, answerSheet);
@@ -130,7 +130,7 @@ public class AnswerSheetController {
      * @param scores        所有题目分数
      * @return
      */
-    @RequestMapping(value = "/rectify", method = RequestMethod.GET)
+    @RequestMapping(value = "/rectify", method = RequestMethod.POST)
     public Response rectify(@RequestParam("answerSheetId") String answerSheetId, @RequestParam("scores") List<Double> scores) {
         String id = answerSheetService.rectify(answerSheetId, scores);
         logger.warn("rectify answerSheet id: {} ", id);
