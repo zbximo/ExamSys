@@ -32,4 +32,8 @@ public interface UserService {
                      String newPwd);
 
     String modifyType(String id);
+
+    List<User> getAllStudent();
+
+    List<User> getAllTeacher();
 }

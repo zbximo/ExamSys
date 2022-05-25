@@ -219,5 +219,15 @@ class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public List<User> getAllStudent() {
+        return userRepository.findByType(Constants.U_CATEGORY_STUDENT);
+    }
+
+    @Override
+    public List<User> getAllTeacher() {
+        return userRepository.findByType(Constants.U_CATEGORY_TEACHER);
+    }
+
 
 }

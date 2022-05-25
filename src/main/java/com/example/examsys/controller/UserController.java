@@ -138,5 +138,23 @@ class UserController {
         return new Response(ExceptionMsg.UPDATE_SUCCESS);
     }
 
+    /**
+     * @return
+     */
+    @RequestMapping(value = "/get_all_students", method = RequestMethod.GET)
+    public ResponseData getAllStudent() {
+        List<User> list = userService.getAllStudent();
+        logger.warn("query all students");
+        return new ResponseData(ExceptionMsg.QUERY_SUCCESS, list);
+    }
 
+    /**
+     * @return
+     */
+    @RequestMapping(value = "/get_all_teacher", method = RequestMethod.GET)
+    public ResponseData getAllTeacher() {
+        List<User> list = userService.getAllTeacher();
+        logger.warn("query all students");
+        return new ResponseData(ExceptionMsg.QUERY_SUCCESS, list);
+    }
 }
