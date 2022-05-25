@@ -68,7 +68,7 @@ class UserController {
      * @param id 用户ID
      * @return
      */
-    @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/view/id/{id}", method = RequestMethod.GET)
     public ResponseData viewUserById(@PathVariable String id) {
         User user = userService.findById(id);
         logger.warn("query student id: {}", id);
@@ -81,7 +81,7 @@ class UserController {
      * @param name 用户姓名
      * @return
      */
-    @RequestMapping(value = "/view/{name}", method = RequestMethod.GET)
+    @RequestMapping(value = "/view/name/{name}", method = RequestMethod.GET)
     public ResponseData viewUserByName(@PathVariable String name) {
         List<User> userList = userService.findByName(name);
         logger.warn("query students name: {}", name);
