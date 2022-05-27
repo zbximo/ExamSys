@@ -143,13 +143,13 @@ class UserServiceImpl implements UserService {
                 map.put("msg", e.getMessage());
             }
             String status = null;
-            if (redisUtil.exists(id + Constants.REDIS_USER_NAME)) {
-                status = redisUtil.get(id + Constants.REDIS_USER_NAME);
+            if (redisUtil.exists(id + "-" + Constants.REDIS_USER_STATUS)) {
+                status = redisUtil.get(id + "-" + Constants.REDIS_USER_STATUS);
                 if (status.equals(Constants.U_STATUS_EXAMING)) {
                     throw new BusinessException(500, "用户考试中,不能异地登陆");
                 }
             } else {
-                redisUtil.set(id + Constants.REDIS_USER_NAME, Constants.U_STATUS_ONLINE);
+                redisUtil.set(id + "-" + Constants.REDIS_USER_STATUS, Constants.U_STATUS_ONLINE);
             }
             return map;
         }
@@ -162,7 +162,7 @@ class UserServiceImpl implements UserService {
     @Override
     public boolean logout(String id) {
         try {
-            redisUtil.delete(id + Constants.REDIS_USER_NAME);
+            redisUtil.delete(id + "-" + Constants.REDIS_USER_STATUS);
         } catch (Exception e) {
             System.out.println(e.toString());
         }

@@ -1,5 +1,6 @@
 package com.example.examsys.utils;
 
+import com.example.examsys.entity.AnswerSheet;
 import com.example.examsys.entity.Paper;
 import com.example.examsys.repository.PaperRepository;
 import org.quartz.*;
@@ -36,6 +37,8 @@ public class DynamicTask {
     private ThreadPoolTaskScheduler threadPoolTaskScheduler;
     @Autowired
     private PaperRepository paperRepository;
+    @Autowired
+    private RedisUtil redisUtil;
 
     private ScheduledFuture future;
     public static ConcurrentHashMap<String, ScheduledFuture> map = new ConcurrentHashMap<String, ScheduledFuture>();

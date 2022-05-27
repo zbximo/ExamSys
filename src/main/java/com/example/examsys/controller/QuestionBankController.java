@@ -21,7 +21,7 @@ import java.util.Map;
  * @description:
  */
 @RestController
-@RequestMapping("/questionBank")
+@RequestMapping("/questionbank")
 public class QuestionBankController {
     private final org.slf4j.Logger logger = LoggerFactory.getLogger(QuestionBankController.class);
     @Autowired

@@ -23,9 +23,4 @@ public class InterceptorConfig implements WebMvcConfigurer {
 
     }
 
-//    @Override
-//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//        registry.addResourceHandler("/img/**")
-//                .addResourceLocations("file:C:/temp-seat/");
-//    }
 }

@@ -28,6 +28,8 @@ public class Constants {
     public static final String U_STATUS_ONLINE = "online";
     public static final String U_STATUS_EXAMING = "examing";
 
-    public static final String REDIS_USER_NAME = "userStatus";
+    public static final String REDIS_USER_STATUS = "userStatus";
+    public static final String REDIS_EXAM_STATUS = "examStatus";
+
 
 }

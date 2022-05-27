@@ -10,6 +10,7 @@ import com.example.examsys.form.ToView.PaperVO;
 import com.example.examsys.repository.AnswerSheetRepository;
 import com.example.examsys.repository.PaperRepository;
 import com.example.examsys.service.AnswerSheetService;
+import com.example.examsys.thread.SubmitThreadPool;
 import com.example.examsys.utils.Constants;
 import com.example.examsys.utils.RedisUtil;
 import org.springframework.beans.BeanUtils;
@@ -32,6 +33,8 @@ public class AnswerSheetServiceImpl implements AnswerSheetService {
     private PaperRepository paperRepository;
     @Autowired
     private RedisUtil redisUtil;
+    @Autowired
+    SubmitThreadPool submitThreadPool;
 
     @Override
     public String submitAnswerSheet(AnswerSheetDTO answerSheetDTO) {
@@ -64,7 +67,9 @@ public class AnswerSheetServiceImpl implements AnswerSheetService {
             answerSheet.setStatus(Constants.A_RECTIFIED);
         }
         answerSheetRepository.save(answerSheet);
-        redisUtil.set(answerSheet.getStudent().getUserId() + Constants.REDIS_USER_NAME, Constants.U_STATUS_ONLINE);
+        // 考试结束去除考生考试状态redis，设置考生用户状态为在线
+        redisUtil.delete(answerSheet.getStudent().getUserId() + "-" + answerSheet.getPaper().getPaperId() + "-" + Constants.REDIS_EXAM_STATUS);
+        redisUtil.set(answerSheet.getStudent().getUserId() + "-" + Constants.REDIS_USER_STATUS, Constants.U_STATUS_ONLINE);
         return answerSheetDTO.getAnswerSheetId();
     }
 
@@ -124,14 +129,17 @@ public class AnswerSheetServiceImpl implements AnswerSheetService {
     @Override
     public AnswerSheet startExam(String studentId, String paperId) {
         // TODO 缓存 （key: paperId+studentId+examStatus, value: status）
-        if (redisUtil.exists(studentId + paperId + "examStatus")) {
+        if (redisUtil.exists(studentId + "-" + paperId + "-" + Constants.REDIS_EXAM_STATUS)) {
             throw new BusinessException(400, "不能重复进行考试");
         }
+
         AnswerSheet answerSheet = answerSheetRepository.findByStudent_UserIdAndPaper_PaperId(studentId, paperId);
         answerSheet.setStatus(Constants.A_EXAM_ING);
-        redisUtil.update(studentId + paperId + "examStatus", Constants.U_STATUS_EXAMING);
+        redisUtil.update(studentId + "-" + paperId + "-" + Constants.REDIS_EXAM_STATUS, Constants.U_STATUS_EXAMING);
+        redisUtil.update(studentId + "-" + Constants.REDIS_USER_STATUS, Constants.U_STATUS_EXAMING);
         answerSheetRepository.save(answerSheet);
         return answerSheet;
+
     }
 
     @Override

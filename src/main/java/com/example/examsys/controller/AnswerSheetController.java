@@ -9,6 +9,7 @@ import com.example.examsys.result.ExceptionMsg;
 import com.example.examsys.result.Response;
 import com.example.examsys.result.ResponseData;
 import com.example.examsys.service.AnswerSheetService;
+import com.example.examsys.thread.SubmitThreadPool;
 import com.example.examsys.utils.LocalUser;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +22,15 @@ import java.util.List;
  * @Date:2022/5/17 10:18
  **/
 @RestController
-@RequestMapping("/answerSheet")
+@RequestMapping("/answersheet")
 public class AnswerSheetController {
     private final org.slf4j.Logger logger = LoggerFactory.getLogger(AnswerSheetController.class);
     @Autowired
     private AnswerSheetService answerSheetService;
     @Autowired
     private AnswerSheetRepository answerSheetRepository;
+    @Autowired
+    SubmitThreadPool submitThreadPool;
 
     /**
      * 测试用
@@ -49,9 +52,11 @@ public class AnswerSheetController {
      */
     @RequestMapping(value = "/submit", method = RequestMethod.POST)
     public ResponseData submitAnswerSheet(@RequestBody AnswerSheetDTO answerSheetDTO) {
-        String id = answerSheetService.submitAnswerSheet(answerSheetDTO);
-        logger.warn("create answerSheet id: {} ", id);
-        return new ResponseData(ExceptionMsg.SUBMIT_SUCCESS, id);
+        submitThreadPool.addOrders(answerSheetDTO);
+
+//        String id = answerSheetService.submitAnswerSheet(answerSheetDTO);
+//        logger.warn("create answerSheet id: {} ", id);
+        return new ResponseData(ExceptionMsg.SUBMIT_SUCCESS, 1);
     }
 
     /**
@@ -115,8 +120,8 @@ public class AnswerSheetController {
      * @return
      */
     @RequestMapping(value = "/start_exam/{paper_id}", method = RequestMethod.GET)
-    @CurrentLimiter(QPS = 5)
-    public ResponseData startExam(@PathVariable String paperId) {
+    @CurrentLimiter(QPS = 100)
+    public ResponseData startExam(@PathVariable("paper_id") String paperId) {
         AnswerSheet answerSheet = answerSheetService.startExam(LocalUser.USER.get().getUserId(), paperId);
         logger.warn("student id: {} startExam", LocalUser.USER.get().getUserId());
         return new ResponseData(ExceptionMsg.UPDATE_SUCCESS, answerSheet);
