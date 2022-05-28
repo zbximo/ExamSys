@@ -14,6 +14,38 @@ public class RedisUtil {
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
+
+    /**
+     * 开始考试，加Redis，防止反复开始
+     *
+     * @param studentID
+     * @param paperId
+     * @return
+     */
+    public String generateStartExamKey(String studentID, String paperId) {
+        return Constants.REDIS_START_EXAM + "-" + studentID + "-" + paperId;
+    }
+
+    /**
+     * 开始考试，加Redis，防止反复提交
+     *
+     * @param answerSheetId
+     * @return
+     */
+    public String generateSubmitAsKey(String answerSheetId) {
+        return Constants.REDIS_SUBMIT_EXAM + "-" + answerSheetId;
+    }
+
+    /**
+     * 用户状态
+     *
+     * @param userId
+     * @return
+     */
+    public String generateUserStatusKey(String userId) {
+        return Constants.REDIS_USER_STATUS + "-" + userId;
+    }
+
     /**
      * 读取缓存
      *

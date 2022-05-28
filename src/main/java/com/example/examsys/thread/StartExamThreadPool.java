@@ -1,7 +1,7 @@
 package com.example.examsys.thread;
 
+import com.example.examsys.entity.AnswerSheet;
 import com.example.examsys.exception.BusinessException;
-import com.example.examsys.form.ToService.AnswerSheetDTO;
 import com.example.examsys.utils.Constants;
 import com.example.examsys.utils.RedisUtil;
 import org.slf4j.LoggerFactory;
@@ -11,23 +11,22 @@ import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-
 import java.util.Queue;
 import java.util.concurrent.*;
 
 /**
  * @author: ximo
- * @date: 2022/5/27 18:47
+ * @date: 2022/5/28 12:05
  * @description:
  */
 @Component
-public class SubmitThreadPool implements BeanFactoryAware {
-    private final org.slf4j.Logger logger = LoggerFactory.getLogger(SubmitThreadPool.class);
+public class StartExamThreadPool implements BeanFactoryAware {
+    private final org.slf4j.Logger logger = LoggerFactory.getLogger(StartExamThreadPool.class);
     private static RedisUtil redisUtil;
 
     @Autowired
     public void setRedisUtil(RedisUtil redisUtil) {
-        SubmitThreadPool.redisUtil = redisUtil;
+        StartExamThreadPool.redisUtil = redisUtil;
     }
 
     //用于从IOC里取对象
@@ -61,9 +60,10 @@ public class SubmitThreadPool implements BeanFactoryAware {
         @Override
         public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
             //加入到缓冲队列
-            AnswerSheetDTO answerSheetDTO = ((SubmitThread) r).getAnswerSheetDTO();
-            msgQueue.offer(answerSheetDTO);
-            System.out.println("系统繁忙, 答卷放入调度线程池，答卷ID:" + answerSheetDTO.getAnswerSheetId());
+            String pid = ((StartExamThread) r).getPaperId();
+            String sid = ((StartExamThread) r).getStudentId();
+            msgQueue.offer(redisUtil.generateStartExamKey(sid, pid));
+            System.out.println("系统繁忙, 考试放入调度线程池，考生ID:" + sid);
         }
     };
 
@@ -77,14 +77,13 @@ public class SubmitThreadPool implements BeanFactoryAware {
     /**
      * 将 提交答卷 任务加入线程池
      */
-    public String submit(AnswerSheetDTO answerSheetDTO) {
+    public AnswerSheet startExam(String studentId, String paperId) {
         // 验证当前进入的考生是否已经存在提交记录
-        String id = answerSheetDTO.getAnswerSheetId();
-        System.out.println("此答卷准备添加到线程池，答卷ID：" + id);
+        System.out.println("此考生准备添加到线程池，考生ID：" + studentId);
+        String id = redisUtil.generateStartExamKey(studentId, paperId);
         if (!redisUtil.exists(id)) {
-            redisUtil.set(redisUtil.generateSubmitAsKey(id), "has_submit");
-            SubmitThread submitThread = new SubmitThread(answerSheetDTO);
-            Future<String> future = threadPool.submit(submitThread);
+            StartExamThread StartExamThread = new StartExamThread(studentId, paperId);
+            Future<AnswerSheet> future = threadPool.submit(StartExamThread);
             try {
                 return future.get();
             } catch (Exception e) {
@@ -92,7 +91,7 @@ public class SubmitThreadPool implements BeanFactoryAware {
                 throw new BusinessException(500, s[s.length - 1]);
             }
         } else {
-            throw new BusinessException(500, "不能重复提交");
+            throw new BusinessException(500, "已经开始考试");
         }
     }
 
@@ -112,10 +111,11 @@ public class SubmitThreadPool implements BeanFactoryAware {
             if (!msgQueue.isEmpty()) {
                 //当线程池的队列容量少于WORK_QUEUE_SIZE，则开始把缓冲队列的考试 加入到 线程池
                 if (threadPool.getQueue().size() < WORK_QUEUE_SIZE) {
-                    AnswerSheetDTO answerSheetDTO = (AnswerSheetDTO) msgQueue.poll();
-                    assert answerSheetDTO != null;
-                    submit(answerSheetDTO);
-                    logger.warn("缓冲队列出现业务，重新添加到线程池，答卷ID: {}", answerSheetDTO.getAnswerSheetId());
+                    String id = (String) msgQueue.poll();
+                    assert id != null;
+                    String[] s = id.split("-");
+                    startExam(s[0], s[1]);
+                    logger.warn("缓冲队列出现开始考试业务，重新添加到线程池，考生ID: {}", s[0]);
                 }
             }
         }

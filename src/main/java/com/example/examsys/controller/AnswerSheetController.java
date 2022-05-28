@@ -9,6 +9,8 @@ import com.example.examsys.result.ExceptionMsg;
 import com.example.examsys.result.Response;
 import com.example.examsys.result.ResponseData;
 import com.example.examsys.service.AnswerSheetService;
+import com.example.examsys.thread.StartExamThread;
+import com.example.examsys.thread.StartExamThreadPool;
 import com.example.examsys.thread.SubmitThreadPool;
 import com.example.examsys.utils.LocalUser;
 import org.slf4j.LoggerFactory;
@@ -31,7 +33,8 @@ public class AnswerSheetController {
     private AnswerSheetRepository answerSheetRepository;
     @Autowired
     SubmitThreadPool submitThreadPool;
-
+    @Autowired
+    StartExamThreadPool startExamThreadPool;
     /**
      * 测试用
      *
@@ -52,11 +55,11 @@ public class AnswerSheetController {
      */
     @RequestMapping(value = "/submit", method = RequestMethod.POST)
     public ResponseData submitAnswerSheet(@RequestBody AnswerSheetDTO answerSheetDTO) {
-        submitThreadPool.addOrders(answerSheetDTO);
+        String id = submitThreadPool.submit(answerSheetDTO);
 
 //        String id = answerSheetService.submitAnswerSheet(answerSheetDTO);
 //        logger.warn("create answerSheet id: {} ", id);
-        return new ResponseData(ExceptionMsg.SUBMIT_SUCCESS, 1);
+        return new ResponseData(ExceptionMsg.SUBMIT_SUCCESS, id);
     }
 
     /**
@@ -122,8 +125,9 @@ public class AnswerSheetController {
     @RequestMapping(value = "/start_exam/{paper_id}", method = RequestMethod.GET)
     @CurrentLimiter(QPS = 100)
     public ResponseData startExam(@PathVariable("paper_id") String paperId) {
-        AnswerSheet answerSheet = answerSheetService.startExam(LocalUser.USER.get().getUserId(), paperId);
-        logger.warn("student id: {} startExam", LocalUser.USER.get().getUserId());
+        AnswerSheet answerSheet = startExamThreadPool.startExam(LocalUser.USER.get().getUserId(), paperId);
+//        AnswerSheet answerSheet = answerSheetService.startExam(LocalUser.USER.get().getUserId(), paperId);
+//        logger.warn("student id: {} startExam", LocalUser.USER.get().getUserId());
         return new ResponseData(ExceptionMsg.UPDATE_SUCCESS, answerSheet);
     }
 

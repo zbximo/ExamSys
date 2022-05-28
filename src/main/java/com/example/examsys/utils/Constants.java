@@ -29,7 +29,7 @@ public class Constants {
     public static final String U_STATUS_EXAMING = "examing";
 
     public static final String REDIS_USER_STATUS = "userStatus";
-    public static final String REDIS_EXAM_STATUS = "examStatus";
-
+    public static final String REDIS_START_EXAM = "startExam";
+    public static final String REDIS_SUBMIT_EXAM = "submitExam";
 
 }
