@@ -1,29 +1,18 @@
 package com.example.examsys.utils;
 
-import com.example.examsys.entity.AnswerSheet;
 import com.example.examsys.entity.Paper;
 import com.example.examsys.repository.PaperRepository;
-import org.quartz.*;
-import org.quartz.impl.StdSchedulerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static org.quartz.JobBuilder.newJob;
 
 /**
  * @author: ximo
