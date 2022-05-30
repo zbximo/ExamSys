@@ -3,6 +3,7 @@ package com.example.examsys.service.impl;
 import com.example.examsys.entity.AnswerDetail;
 import com.example.examsys.entity.AnswerSheet;
 import com.example.examsys.entity.Paper;
+import com.example.examsys.entity.Question;
 import com.example.examsys.form.ToView.statistics.QuestionDetailVO;
 import com.example.examsys.form.ToView.statistics.ScoreVO;
 import com.example.examsys.repository.AnswerSheetRepository;
@@ -12,10 +13,7 @@ import com.example.examsys.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author: ximo
@@ -62,6 +60,8 @@ public class AnalysisServiceImpl implements AnalysisService {
     }
 
     /**
+     * 获取每道题的情况 客观题:{"options":{"A":5,"B",2},"answer:{"correct":1 "wrong":10},"avgScore":1}; 主观题：{"avgScore":2}
+     *
      * @param paperId
      * @return
      */
@@ -70,40 +70,54 @@ public class AnalysisServiceImpl implements AnalysisService {
         Paper paper = paperRepository.findByPaperId(paperId);
 
         List<AnswerSheet> answerSheetList = answerSheetRepository.findByPaper_PaperId(paperId);
+        List<QuestionDetailVO> questionDetailVOList = new ArrayList<>();
         for (int i = 0; i < paper.getQuestionList().size(); i++) {
+            Question question = paper.getQuestionList().get(i);
             QuestionDetailVO questionDetailVO = new QuestionDetailVO();
-            questionDetailVO.setQuestion(paper.getQuestionList().get(i));
-            final Double[] objective = new Double[4];
-            final Integer[] options = new Integer[3];
-            final List<Double> objectiveList = Arrays.asList(0., 0., 0., 0.); // correct wrong noAnswer sumScore
-//            final List<Integer> options =
-            // 客观题
-            if (!paper.getQuestionList().get(i).getQuestionType().equals(Constants.Q_CATEGORY_SUBJECTIVE)) {
-//                long correct = answerSheetList.stream().filter(
-//                        answerSheet -> {
-//                            answerSheet.getAnswerDetailList().get()
-//                        }
-//                ).count()
-//                answerSheetList.stream().forEach(
-//                        answerSheet -> {
-//                            if (answerSheet.getSubmitDate() == null) {
-//                                objectiveList.set(2, objectiveList.get(2) + 1);
-//                            } else {
-//                                answerSheet.getAnswerDetailList().stream().forEach(
-//                                        answerDetail -> {
-//
-//                                        }
-//                                );
-//                            }
-//                        }
-//                );
-            } else {
-
-            }
-
+            questionDetailVO.setQuestion(question);
+            Map<String, Object> analysisMap = new HashMap<>();
+            Map<String, Integer> optionMap = new HashMap<>();
+            Map<String, Integer> answerNumMap = new HashMap<>();
+            answerNumMap.put("correct", 0);
+            answerNumMap.put("wrong", 0);
+            // 初始化map
+            question.getOptions().forEach(
+                    s -> {
+                        optionMap.put(s, 0);
+                    }
+            );
+            Integer[] temp = {i, 0};
+            analysisMap.put("options", optionMap);
+            analysisMap.put("answer", answerNumMap);
+            analysisMap.put("avgScore", 0.);
+            answerSheetList.forEach(
+                    answerSheet -> {
+                        if (answerSheet.getSubmitDate() == null) {
+                            temp[1] += 1;
+                        } else {
+                            if (!question.getQuestionType().equals(Constants.Q_CATEGORY_SUBJECTIVE)) {
+                                answerSheet.getAnswerDetailList().get(temp[0]).getAnswer().forEach(
+                                        s -> {
+                                            optionMap.put(s, optionMap.get(s) + 1);
+                                        }
+                                );
+                                if (answerSheet.getAnswerDetailList().get(temp[0]).getScore() > 0) {
+                                    answerNumMap.put("correct", (Integer) answerNumMap.get("correct") + 1);
+                                } else {
+                                    answerNumMap.put("wrong", (Integer) answerNumMap.get("wrong") + 1);
+                                }
+                            }
+                            analysisMap.put("avgScore", (Double) analysisMap.get("avgScore")
+                                    + answerSheet.getAnswerDetailList().get(temp[0]).getScore());
+                        }
+                    }
+            );
+            analysisMap.put("avgScore", (Double) analysisMap.get("avgScore") / (answerSheetList.size() - temp[1]));
+            analysisMap.put("answer",answerNumMap);
+            analysisMap.put("options", optionMap);
+            questionDetailVO.setAnalysis(analysisMap);
+            questionDetailVOList.add(questionDetailVO);
         }
-
-
-        return null;
+        return questionDetailVOList;
     }
 }

@@ -15,14 +15,5 @@ public class QuestionDetailVO {
 
     private Question question;
 
-    private Integer correctNumber;
-
-    private Integer wrongNumber;
-
-    /**
-     * 客观题每个选项选了多少人
-     */
-    private List<Integer> options;
-
-    private Double avgScore;
+    private Object analysis;
 }
