@@ -55,7 +55,8 @@ public class AnswerSheetServiceImpl implements AnswerSheetService {
             Question question = questionList.get(i);
             AnswerDetail answerDetail = answerDetailList.get(i);
             if (!question.getQuestionType().equals(Constants.Q_CATEGORY_SUBJECTIVE)) {
-                if (question.getTrueAnswer().containsAll(answerDetail.getAnswer())) {
+                if (question.getTrueAnswer().containsAll(answerDetail.getAnswer()) &&
+                        answerDetail.getAnswer().containsAll(question.getTrueAnswer())) {
                     answerDetailList.get(i).setScore(question.getScore());
                 }
             } else {
