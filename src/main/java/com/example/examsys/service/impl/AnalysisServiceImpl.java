@@ -41,10 +41,15 @@ public class AnalysisServiceImpl implements AnalysisService {
         List<ScoreVO> scoreVOList = new ArrayList<>();
         for (AnswerSheet answerSheet : answerSheetList) {
             ScoreVO scoreVO = new ScoreVO();
-            scoreVO.setScore(getScore(answerSheet));
+            if (scoreVO.getAttendance() == null) {
+                scoreVO.setScore(0.);
+            } else {
+                scoreVO.setScore(getScore(answerSheet));
+            }
             scoreVO.setUser(answerSheet.getStudent());
-            scoreVOList.add(scoreVO);
             scoreVO.setAttendance(answerSheet.getSubmitDate() != null);
+            scoreVOList.add(scoreVO);
+
         }
         Collections.sort(scoreVOList);
         scoreVOList.get(0).setRank(1);
@@ -68,7 +73,6 @@ public class AnalysisServiceImpl implements AnalysisService {
     @Override
     public List<QuestionDetailVO> getQuestionDetail(String paperId) {
         Paper paper = paperRepository.findByPaperId(paperId);
-
         List<AnswerSheet> answerSheetList = answerSheetRepository.findByPaper_PaperId(paperId);
         List<QuestionDetailVO> questionDetailVOList = new ArrayList<>();
         for (int i = 0; i < paper.getQuestionList().size(); i++) {
@@ -113,7 +117,7 @@ public class AnalysisServiceImpl implements AnalysisService {
                     }
             );
             analysisMap.put("avgScore", (Double) analysisMap.get("avgScore") / (answerSheetList.size() - temp[1]));
-            analysisMap.put("answer",answerNumMap);
+            analysisMap.put("answer", answerNumMap);
             analysisMap.put("options", optionMap);
             questionDetailVO.setAnalysis(analysisMap);
             questionDetailVOList.add(questionDetailVO);
