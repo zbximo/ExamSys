@@ -39,7 +39,7 @@ public class AnswerSheetServiceImpl implements AnswerSheetService {
     @Override
     public String submitAnswerSheet(AnswerSheetDTO answerSheetDTO) {
         AnswerSheet answerSheet = answerSheetRepository.findByAnswerSheetId(answerSheetDTO.getAnswerSheetId());
-        BeanUtils.copyProperties(answerSheetDTO, answerSheet);
+//        BeanUtils.copyProperties(answerSheetDTO, answerSheet);
         answerSheet.setSubmitDate(new Date(System.currentTimeMillis()));
         answerSheet.setAnswerDetailList(answerSheetDTO.getAnswerDetailList());
         boolean hasSubject = false;
@@ -69,6 +69,7 @@ public class AnswerSheetServiceImpl implements AnswerSheetService {
         } else {
             answerSheet.setStatus(Constants.A_RECTIFIED);
         }
+        answerSheet.setAnswerDetailList(answerDetailList);
         answerSheetRepository.save(answerSheet);
         // 考试结束去除考生考试状态redis，设置考生用户状态为在线
         redisUtil.delete(redisUtil.generateStartExamKey(answerSheet.getStudent().getUserId(), answerSheet.getPaper().getPaperId()));

@@ -61,6 +61,27 @@ public class PaperServiceImpl implements PaperService {
         String pid = new ObjectId().toString();
         paper.setPaperId(pid);
         paper.setCreateDate(new Date(System.currentTimeMillis()));
+        // 检查试卷
+        paper.getQuestionList().forEach(
+                question -> {
+                    if (question.getQuestionType() == null){
+                        throw new BusinessException(400, "题目类型未指定");
+                    }
+                    if (question.getQuestionTitle() == null){
+                        throw new BusinessException(400, "题目标题未指定");
+                    }
+                    if (question.getOptions() == null){
+                        throw new BusinessException(400, "题目选项未指定");
+                    }
+                    if (question.getTrueAnswer() == null){
+                        throw new BusinessException(400, "题目正确答案未指定");
+                    }
+                    if (question.getScore() == null){
+                        throw new BusinessException(400, "题目分数没全");
+                    }
+
+                }
+        );
         try {
             paper.setStartDate(DateFormatUtil.str2date(paperDTO.getStartDate()));
             paper.setEndDate(DateFormatUtil.str2date(paperDTO.getEndDate()));
@@ -69,9 +90,8 @@ public class PaperServiceImpl implements PaperService {
         }
 
         paper.setStatus(Constants.P_STATUS_NOT_START);
-        //TODO 定时任务 试卷开启 关闭
+        // 定时任务 试卷开启 关闭
         dynamicTask.startCron(paper);
-        //TODO 消息队列
         addBlankAnswerSheet(paper);
         paperRepository.save(paper);
         return pid;
