@@ -41,7 +41,7 @@ public class AnalysisServiceImpl implements AnalysisService {
         List<ScoreVO> scoreVOList = new ArrayList<>();
         for (AnswerSheet answerSheet : answerSheetList) {
             ScoreVO scoreVO = new ScoreVO();
-            if (scoreVO.getAttendance() == null) {
+            if (answerSheet.getSubmitDate()  == null) {
                 scoreVO.setScore(0.);
             } else {
                 scoreVO.setScore(getScore(answerSheet));
