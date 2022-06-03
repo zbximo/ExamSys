@@ -53,12 +53,12 @@ public class DynamicTask {
                 new CronTrigger(getCron(start)));
         logger.warn(getCron(start));
         assert future != null;
-        DynamicTask.map.put(pid, future);
+        DynamicTask.map.put(pid + "ExamStart", future);
         future = threadPoolTaskScheduler.schedule(new Stop(pid),
                 new CronTrigger(getCron(stop)));
         logger.warn(getCron(stop));
         assert future != null;
-        DynamicTask.map.put(pid, future);
+        DynamicTask.map.put(pid + "ExamStop", future);
     }
 
 
@@ -75,7 +75,7 @@ public class DynamicTask {
             paper.setStatus(Constants.P_STATUS_START);
             paperRepository.save(paper);
             logger.info("paperId:{} exam start", this.paperId);
-            future = DynamicTask.map.remove(paperId);
+            future = DynamicTask.map.remove(paperId + "ExamStart");
             future.cancel(true);
         }
     }
@@ -93,7 +93,8 @@ public class DynamicTask {
             paper.setStatus(Constants.P_STATUS_END);
             paperRepository.save(paper);
             logger.info("paperId:{} exam stop", this.paperId);
-            DynamicTask.map.remove(this.paperId);
+            future = DynamicTask.map.remove(paperId + "ExamStop");
+            future.cancel(true);
         }
     }
 }
