@@ -64,19 +64,19 @@ public class PaperServiceImpl implements PaperService {
         // 检查试卷
         paper.getQuestionList().forEach(
                 question -> {
-                    if (question.getQuestionType() == null){
+                    if (question.getQuestionType() == null) {
                         throw new BusinessException(400, "题目类型未指定");
                     }
-                    if (question.getQuestionTitle() == null){
+                    if (question.getQuestionTitle() == null) {
                         throw new BusinessException(400, "题目标题未指定");
                     }
-                    if (question.getOptions() == null){
+                    if (question.getOptions() == null) {
                         throw new BusinessException(400, "题目选项未指定");
                     }
-                    if (question.getTrueAnswer() == null){
+                    if (question.getTrueAnswer() == null) {
                         throw new BusinessException(400, "题目正确答案未指定");
                     }
-                    if (question.getScore() == null){
+                    if (question.getScore() == null) {
                         throw new BusinessException(400, "题目分数没全");
                     }
 

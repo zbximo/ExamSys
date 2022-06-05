@@ -13,7 +13,6 @@ import com.example.examsys.service.AnswerSheetService;
 import com.example.examsys.thread.SubmitThreadPool;
 import com.example.examsys.utils.Constants;
 import com.example.examsys.utils.RedisUtil;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,7 +57,7 @@ public class AnswerSheetServiceImpl implements AnswerSheetService {
                 if (question.getTrueAnswer().containsAll(answerDetail.getAnswer()) &&
                         answerDetail.getAnswer().containsAll(question.getTrueAnswer())) {
                     answerDetailList.get(i).setScore(question.getScore());
-                }else {
+                } else {
                     answerDetailList.get(i).setScore(0.);
                 }
             } else {

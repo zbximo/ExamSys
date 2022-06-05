@@ -2,7 +2,6 @@ package com.example.examsys.service.impl;
 
 import com.example.examsys.entity.Course;
 import com.example.examsys.entity.User;
-import com.example.examsys.exception.BusinessException;
 import com.example.examsys.form.ToService.CourseDTO;
 import com.example.examsys.repository.CourseRepository;
 import com.example.examsys.service.CourseService;

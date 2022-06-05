@@ -5,6 +5,7 @@ package com.example.examsys.interceptor;
  * @date: 2022/5/19 20:59
  * @description:
  */
+
 import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.example.examsys.entity.User;
@@ -33,18 +34,18 @@ public class JWTInterceptor implements HandlerInterceptor {
             LocalUser.USER.set(user);
             //放行请求
             return true;
-        }catch (SignatureVerificationException e){
+        } catch (SignatureVerificationException e) {
             e.printStackTrace();
-            map.put("msg","无效签名");
-        }catch (TokenExpiredException e){
+            map.put("msg", "无效签名");
+        } catch (TokenExpiredException e) {
             e.printStackTrace();
-            map.put("msg","token过期");
-        }catch (Exception e){
+            map.put("msg", "token过期");
+        } catch (Exception e) {
             e.printStackTrace();
-            map.put("msg","token无效");
+            map.put("msg", "token无效");
         }
         //设置状态
-        map.put("state",false);
+        map.put("state", false);
         //将map 转为json jackson 返回信息
         String json = new ObjectMapper().writeValueAsString(map);
         response.setContentType("application/json;charset=UTF-8");
@@ -54,6 +55,7 @@ public class JWTInterceptor implements HandlerInterceptor {
 
     /**
      * 关闭当前线程
+     *
      * @param request
      * @param response
      * @param handler

@@ -6,9 +6,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author: ximo
@@ -26,7 +24,7 @@ public class QuestionBank {
     /**
      * 问题
      */
-    @Field(type = FieldType.Text,analyzer = "ik_max_word")
+    @Field(type = FieldType.Text, analyzer = "ik_max_word")
     private String questionTitle;
 
     /**
@@ -38,7 +36,7 @@ public class QuestionBank {
     /**
      * 问题涉及的领域
      */
-    @Field(type = FieldType.Text,analyzer = "ik_max_word")
+    @Field(type = FieldType.Text, analyzer = "ik_max_word")
     private List<String> questionField;
 
     /**

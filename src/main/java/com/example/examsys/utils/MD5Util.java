@@ -1,13 +1,10 @@
 package com.example.examsys.utils;
 
-import com.example.examsys.controller.AnswerSheetController;
 import org.slf4j.LoggerFactory;
 
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Arrays;
-import java.util.logging.Logger;
 
 /**
  * @author: ximo

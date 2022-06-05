@@ -3,7 +3,6 @@ package com.example.examsys.config;
 import com.example.examsys.interceptor.JWTInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
@@ -19,7 +18,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
                 //不放行
                 .addPathPatterns("/**")
                 //放行，
-                .excludePathPatterns("/user/login","/user/register");
+                .excludePathPatterns("/user/login", "/user/register");
 
     }
 

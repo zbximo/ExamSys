@@ -9,8 +9,8 @@ public class test {
     public static void main(String[] args) {
         String a = "xvhan";
         String b = a;
-        System.out.println(a+b);
+        System.out.println(a + b);
         a = "shanggouquan";
-        System.out.println(a+b);
+        System.out.println(a + b);
     }
 }

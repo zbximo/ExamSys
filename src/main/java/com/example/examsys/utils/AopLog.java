@@ -4,6 +4,7 @@ package com.example.examsys.utils;
  * @author:Benjamin
  * @Date:2022/4/2 13:52
  **/
+
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
  * 使用@Around在切入点前后切入内容，并自己控制何时执行切入点自身的内容
  * 使用@AfterThrowing用来处理当切入内容部分抛出异常之后的处理逻辑
  */
+
 /**
  * Description:  使之成为切面类
  */
@@ -32,6 +34,7 @@ public class AopLog {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     //线程局部的变量,解决多线程中相同变量的访问冲突问题。
     ThreadLocal<Long> startTime = new ThreadLocal<>();
+
     //定义切点
     @Pointcut("execution(public * com.example.examsys.controller..*.*(..))")
     public void aopWebLog() {
@@ -54,7 +57,7 @@ public class AopLog {
         logger.info("参数 : " + request.getQueryString());
     }
 
-    @AfterReturning(pointcut = "aopWebLog()",returning = "retObject")
+    @AfterReturning(pointcut = "aopWebLog()", returning = "retObject")
     public void doAfterReturning(Object retObject) throws Throwable {
         // 处理完请求，返回内容
         logger.info("应答值 : " + retObject);

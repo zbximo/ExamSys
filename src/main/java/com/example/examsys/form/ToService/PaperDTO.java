@@ -4,7 +4,6 @@ import com.example.examsys.entity.Course;
 import com.example.examsys.entity.Question;
 import lombok.Data;
 
-import java.util.Date;
 import java.util.List;
 
 /**

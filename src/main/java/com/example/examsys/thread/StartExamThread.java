@@ -2,7 +2,6 @@ package com.example.examsys.thread;
 
 
 import com.example.examsys.entity.AnswerSheet;
-import com.example.examsys.form.ToService.AnswerSheetDTO;
 import com.example.examsys.service.AnswerSheetService;
 import com.example.examsys.utils.ApplicationContextProvider;
 import org.springframework.context.annotation.Scope;

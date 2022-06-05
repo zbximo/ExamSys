@@ -1,10 +1,7 @@
 package com.example.examsys.repository;
 
 import com.example.examsys.entity.AnswerSheet;
-import com.example.examsys.entity.Paper;
-import com.example.examsys.entity.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

@@ -1,15 +1,7 @@
 package com.example.examsys.form.ToView;
 
-import com.example.examsys.entity.AnswerDetail;
-import com.example.examsys.entity.Paper;
 import com.example.examsys.entity.User;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Field;
-
-import java.util.Date;
-import java.util.List;
 
 /**
  * @author: ximo

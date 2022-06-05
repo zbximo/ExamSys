@@ -5,7 +5,7 @@ package com.example.examsys.result;
  * @date: 2022/3/22 10:28
  * @description:
  */
-public class ResponseData extends Response{
+public class ResponseData extends Response {
     private Object data;
 
     public ResponseData(Object data) {

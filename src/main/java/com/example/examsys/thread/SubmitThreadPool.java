@@ -2,7 +2,6 @@ package com.example.examsys.thread;
 
 import com.example.examsys.exception.BusinessException;
 import com.example.examsys.form.ToService.AnswerSheetDTO;
-import com.example.examsys.utils.Constants;
 import com.example.examsys.utils.RedisUtil;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 
 import java.util.Queue;
 import java.util.concurrent.*;

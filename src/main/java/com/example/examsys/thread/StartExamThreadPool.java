@@ -2,7 +2,6 @@ package com.example.examsys.thread;
 
 import com.example.examsys.entity.AnswerSheet;
 import com.example.examsys.exception.BusinessException;
-import com.example.examsys.utils.Constants;
 import com.example.examsys.utils.RedisUtil;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;

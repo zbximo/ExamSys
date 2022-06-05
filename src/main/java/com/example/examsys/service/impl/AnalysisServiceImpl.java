@@ -41,7 +41,7 @@ public class AnalysisServiceImpl implements AnalysisService {
         List<ScoreVO> scoreVOList = new ArrayList<>();
         for (AnswerSheet answerSheet : answerSheetList) {
             ScoreVO scoreVO = new ScoreVO();
-            if (answerSheet.getSubmitDate()  == null) {
+            if (answerSheet.getSubmitDate() == null) {
                 scoreVO.setScore(0.);
             } else {
                 scoreVO.setScore(getScore(answerSheet));
@@ -116,7 +116,7 @@ public class AnalysisServiceImpl implements AnalysisService {
                         }
                     }
             );
-            if (!question.getQuestionType().equals(Constants.Q_CATEGORY_SUBJECTIVE)){
+            if (!question.getQuestionType().equals(Constants.Q_CATEGORY_SUBJECTIVE)) {
                 analysisMap.put("answer", answerNumMap);
                 analysisMap.put("options", optionMap);
             }
