@@ -97,7 +97,14 @@ public class AnswerSheetServiceImpl implements AnswerSheetService {
         for (AnswerSheet answerSheet : answerSheetList) {
             AnswerSheetBasicInfoVO answerSheetBasicInfoVO = new AnswerSheetBasicInfoVO();
             answerSheetBasicInfoVO.setAnswerSheetId(answerSheet.getAnswerSheetId());
-            answerSheetBasicInfoVO.setStatus(answerSheet.getStatus() > answerSheet.getPaper().getStatus() ? answerSheet.getStatus() : answerSheet.getPaper().getStatus());
+            // 考试结束 且 没交卷 状态为缺考 否则取状态值更大者
+            if (answerSheet.getPaper().getStatus().equals(Constants.P_STATUS_END)) {
+                if (answerSheet.getSubmitDate() == null) {
+                    answerSheetBasicInfoVO.setStatus(Constants.A_NOT_ATTENDANCE);
+                }
+            } else {
+                answerSheetBasicInfoVO.setStatus(answerSheet.getStatus() > answerSheet.getPaper().getStatus() ? answerSheet.getStatus() : answerSheet.getPaper().getStatus());
+            }
             answerSheetBasicInfoVO.setStudent(answerSheet.getStudent());
             answerSheetBasicInfoVOList.add(answerSheetBasicInfoVO);
         }
@@ -117,7 +124,15 @@ public class AnswerSheetServiceImpl implements AnswerSheetService {
                 paperVO.setPaperTitle(answerSheet.getPaper().getPaperTitle());
                 paperVO.setStartDate(answerSheet.getPaper().getStartDate());
                 paperVO.setEndDate(answerSheet.getPaper().getEndDate());
-                paperVO.setStatus(answerSheet.getStatus() > answerSheet.getPaper().getStatus() ? answerSheet.getStatus() : answerSheet.getPaper().getStatus());
+                // 考试结束 且 没交卷 状态为缺考 否则取状态值更大者
+                if (answerSheet.getPaper().getStatus().equals(Constants.P_STATUS_END)) {
+                    if (answerSheet.getSubmitDate() == null) {
+                        paperVO.setStatus(Constants.A_NOT_ATTENDANCE);
+                    }
+                } else {
+                    paperVO.setStatus(answerSheet.getStatus() > answerSheet.getPaper().getStatus() ? answerSheet.getStatus() : answerSheet.getPaper().getStatus());
+                }
+
                 paperVOList.add(paperVO);
             }
         }

@@ -9,11 +9,7 @@ import com.example.examsys.result.ResponseData;
 import com.example.examsys.service.QuestionBankService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author: ximo
@@ -29,6 +25,12 @@ public class QuestionBankController {
     @Autowired
     private QuestionBankRepository questionBankRepository;
 
+    /**
+     * 题库添加题目
+     *
+     * @param questionBankDTO
+     * @return
+     */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseData add(@RequestBody QuestionBankDTO questionBankDTO) {
         String id = questionBankService.add(questionBankDTO);
@@ -36,6 +38,12 @@ public class QuestionBankController {
         return new ResponseData(ExceptionMsg.CREATE_SUCCESS, id);
     }
 
+    /**
+     * 题库更新题目
+     *
+     * @param questionBank
+     * @return
+     */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResponseData update(@RequestBody QuestionBank questionBank) {
         questionBankService.update(questionBank);
@@ -43,17 +51,37 @@ public class QuestionBankController {
         return new ResponseData(ExceptionMsg.CREATE_SUCCESS, questionBank.getQuestionId());
     }
 
+    /**
+     * 分页查询
+     *
+     * @param start
+     * @param pageSize
+     * @param title
+     * @param field
+     * @return
+     */
     @RequestMapping(value = "/search/{start}/{page_size}/{title}/{field}", method = RequestMethod.GET)
     public ResponseData searchByPage(@PathVariable Integer start, @PathVariable("page_size") Integer pageSize,
                                      @PathVariable String title, @PathVariable String field) {
         return new ResponseData(ExceptionMsg.QUERY_SUCCESS, questionBankService.searchByPage(start, pageSize, title, field));
     }
 
+    /**
+     * 获取所有题目
+     *
+     * @return
+     */
     @RequestMapping(value = "/get_all", method = RequestMethod.GET)
     public ResponseData getAll() {
         return new ResponseData(ExceptionMsg.QUERY_SUCCESS, questionBankService.getAll());
     }
 
+    /**
+     * 智能组卷（选题）
+     *
+     * @param paramsDTO
+     * @return
+     */
     @RequestMapping(value = "/create_paper", method = RequestMethod.POST)
     public ResponseData createPaperIntelligent(@RequestBody ParamsDTO paramsDTO) {
         return new ResponseData(ExceptionMsg.QUERY_SUCCESS, questionBankService.createPapersIntelligent(paramsDTO));

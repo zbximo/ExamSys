@@ -23,9 +23,15 @@ public class QuestionBank {
     @Field(type = FieldType.Keyword)
     private String questionId;
 
+    /**
+     * 问题
+     */
     @Field(type = FieldType.Text,analyzer = "ik_max_word")
     private String questionTitle;
 
+    /**
+     * 问题类型
+     */
     @Field(type = FieldType.Integer)
     private Integer questionType;
 
@@ -35,7 +41,13 @@ public class QuestionBank {
     @Field(type = FieldType.Text,analyzer = "ik_max_word")
     private List<String> questionField;
 
+    /**
+     * 选项
+     */
     private List<String> options;
 
+    /**
+     * 正确答案
+     */
     private List<String> trueAnswer;
 }

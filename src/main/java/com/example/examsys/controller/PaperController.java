@@ -29,6 +29,8 @@ public class PaperController {
     private AnswerSheetService answerSheetService;
 
     /**
+     * 添加试卷
+     *
      * @param paperDTO 试卷内容
      * @return
      */
@@ -40,6 +42,8 @@ public class PaperController {
     }
 
     /**
+     * 删除试卷
+     *
      * @param id 试卷ID
      * @return
      */

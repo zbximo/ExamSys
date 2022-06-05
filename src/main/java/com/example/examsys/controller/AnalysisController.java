@@ -38,6 +38,7 @@ public class AnalysisController {
     }
 
     /**
+     * 获取每道题的答题情况
      * 客观题:{"options":{"A":5,"B",2},"answer:{"correct":1 "wrong":10},"avgScore":1};
      * 主观题：{"avgScore":2}
      *

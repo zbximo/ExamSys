@@ -24,6 +24,7 @@ public class Constants {
     public static final Integer P_STATUS_END = 3; // 考试结束
     public static final Integer A_NOT_RECTIFY = 4; // 待批阅
     public static final Integer A_RECTIFIED = 5; // 已批阅
+    public static final Integer A_NOT_ATTENDANCE = -1; // 缺考
 
     public static final String U_STATUS_ONLINE = "online";
     public static final String U_STATUS_EXAMING = "examing";

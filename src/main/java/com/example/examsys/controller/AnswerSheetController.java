@@ -122,7 +122,7 @@ public class AnswerSheetController {
      * @return
      */
     @RequestMapping(value = "/start_exam/{paper_id}", method = RequestMethod.GET)
-    @CurrentLimiter(QPS = 5)
+    @CurrentLimiter(QPS = 50)
     public ResponseData startExam(@PathVariable("paper_id") String paperId) {
         AnswerSheet answerSheet = startExamThreadPool.startExam(LocalUser.USER.get().getUserId(), paperId);
 //        AnswerSheet answerSheet = answerSheetService.startExam(LocalUser.USER.get().getUserId(), paperId);
