@@ -58,6 +58,8 @@ public class AnswerSheetServiceImpl implements AnswerSheetService {
                 if (question.getTrueAnswer().containsAll(answerDetail.getAnswer()) &&
                         answerDetail.getAnswer().containsAll(question.getTrueAnswer())) {
                     answerDetailList.get(i).setScore(question.getScore());
+                }else {
+                    answerDetailList.get(i).setScore(0.);
                 }
             } else {
                 answerDetailList.get(i).setScore(0.);

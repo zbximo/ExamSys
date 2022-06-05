@@ -121,7 +121,6 @@ public class QuestionBankServiceImpl implements QuestionBankService {
                     Collections.shuffle(l);
                     List<Integer> newList = new ArrayList<>();
                     switch (type) {
-
                         case 0: {
                             int x = l.size() >= paramsDTO.getSingle() ? 0 : paramsDTO.getSingle() - l.size();
                             missMap.put("Single", x);
@@ -133,30 +132,30 @@ public class QuestionBankServiceImpl implements QuestionBankService {
                             break;
                         }
                         case 1: {
-                            int x = l.size() >= paramsDTO.getSingle() ? 0 : paramsDTO.getSingle() - l.size();
+                            int x = l.size() >= paramsDTO.getMulti() ? 0 : paramsDTO.getMulti() - l.size();
                             missMap.put("Multi", x);
                             if (x == 0) {
-                                newList = l.subList(0, paramsDTO.getSingle());
+                                newList = l.subList(0, paramsDTO.getMulti());
                             } else {
                                 newList = l.subList(0, l.size());
                             }
                             break;
                         }
                         case 2: {
-                            int x = l.size() >= paramsDTO.getSingle() ? 0 : paramsDTO.getSingle() - l.size();
+                            int x = l.size() >= paramsDTO.getJudgment() ? 0 : paramsDTO.getJudgment() - l.size();
                             missMap.put("Judgment", x);
                             if (x == 0) {
-                                newList = l.subList(0, paramsDTO.getSingle());
+                                newList = l.subList(0, paramsDTO.getJudgment());
                             } else {
                                 newList = l.subList(0, l.size());
                             }
                             break;
                         }
                         case 3: {
-                            int x = l.size() >= paramsDTO.getSingle() ? 0 : paramsDTO.getSingle() - l.size();
+                            int x = l.size() >= paramsDTO.getSubject() ? 0 : paramsDTO.getSubject() - l.size();
                             missMap.put("Subject", x);
                             if (x == 0) {
-                                newList = l.subList(0, paramsDTO.getSingle());
+                                newList = l.subList(0, paramsDTO.getSubject());
                             } else {
                                 newList = l.subList(0, l.size());
                             }

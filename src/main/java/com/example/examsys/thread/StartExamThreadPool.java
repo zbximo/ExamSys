@@ -75,7 +75,7 @@ public class StartExamThreadPool implements BeanFactoryAware {
 
 
     /**
-     * 将 提交答卷 任务加入线程池
+     * 将 开始考试 任务加入线程池
      */
     public AnswerSheet startExam(String studentId, String paperId) {
         // 验证当前进入的考生是否已经存在提交记录

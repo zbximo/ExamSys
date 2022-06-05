@@ -91,8 +91,8 @@ public class AnalysisServiceImpl implements AnalysisService {
                     }
             );
             Integer[] temp = {i, 0};
-            analysisMap.put("options", optionMap);
-            analysisMap.put("answer", answerNumMap);
+//            analysisMap.put("options", optionMap);
+//            analysisMap.put("answer", answerNumMap);
             analysisMap.put("avgScore", 0.);
             answerSheetList.forEach(
                     answerSheet -> {
@@ -116,9 +116,11 @@ public class AnalysisServiceImpl implements AnalysisService {
                         }
                     }
             );
+            if (!question.getQuestionType().equals(Constants.Q_CATEGORY_SUBJECTIVE)){
+                analysisMap.put("answer", answerNumMap);
+                analysisMap.put("options", optionMap);
+            }
             analysisMap.put("avgScore", (Double) analysisMap.get("avgScore") / (answerSheetList.size() - temp[1]));
-            analysisMap.put("answer", answerNumMap);
-            analysisMap.put("options", optionMap);
             questionDetailVO.setAnalysis(analysisMap);
             questionDetailVOList.add(questionDetailVO);
         }
